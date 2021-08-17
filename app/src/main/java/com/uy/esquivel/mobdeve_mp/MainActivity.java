@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         if (player != null) {
             player.release();
             player = null;
-            Toast.makeText(this, "MediaPlayer released", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
     }
 

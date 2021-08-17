@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,9 @@ public class GameActivity extends AppCompatActivity {
     private Accelerometer accelerometer;
     private Gyroscope gyroscope;
 
+    //game-related variables
+    private String state = "lower_left";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +31,87 @@ public class GameActivity extends AppCompatActivity {
         accelerometer = new Accelerometer(this);
         gyroscope = new Gyroscope(this);
 
-        accelerometer.setListener(new Accelerometer.Listener() {
-            @Override
-            public void onTranslation(float tX, float tY, float tZ) {
-               if (tX > 1.0f){
-                   getWindow().getDecorView().setBackgroundColor(Color.RED);
-               }
-               else if (tX < -1.0f){
-                   getWindow().getDecorView().setBackgroundColor(Color.BLUE);
-               }
-            }
-        });
+//        accelerometer.setListener(new Accelerometer.Listener() {
+//            @Override
+//            public void onTranslation(float tX, float tY, float tZ) {
+//                ImageView img = (ImageView) findViewById(R.id.iv_bg);
+//                String states[] = new String[2];
+//                states = state.split ("_");
+//                if (tX > 1.0f){ //going right
+//
+//                    if (states[0] == "lower"){//if lower
+//                        if (states[1] == "left"){
+//                            state = "lower_right";
+//                            img.setImageResource(R.drawable.lowerright);
+//                        }
+//                        else{
+//                            state = "upper_right";
+//                            img.setImageResource(R.drawable.upperright);
+//                        }
+//
+//                    }
+//                    else { //if upper
+//                        if (states[1] == "left"){
+//                            state = "upper_right";
+//                            img.setImageResource(R.drawable.upperright);
+//                        }
+//                        else{
+//                            state = "upper_right";
+//                            img.setImageResource(R.drawable.upperright);
+//                        }
+//                    }
+//               }
+//               else if (tX < -1.0f){ //going left
+//                   if (states[0] == "lower"){ //if lower
+//                       if (states[1] == "right"){
+//                           state = "lower_left";
+//                           img.setImageResource(R.drawable.lowerleft);
+//                       }
+//
+//                   }
+//                   else{ //if upper
+//                       if (states[1] == "right"){
+//                           state = "upper_left";
+//                           img.setImageResource(R.drawable.upperleft);
+//                       }
+//                   }
+//
+//               }
+//            }
+//        });
 
         gyroscope.setListener(new Gyroscope.Listener() {
             @Override
             public void onRotation(float rX, float rY, float rZ) {
-                if (rZ > 1.0f){
-                    getWindow().getDecorView().setBackgroundColor(Color.GREEN);
+                ImageView img = (ImageView) findViewById(R.id.iv_bg);
+                String states[] = new String[2];
+                states = state.split ("_");
+
+                if (rY > 1.0f){
+                    if (states[0] == "left"){//if left
+                        if (states[1] == "left"){
+                            state = "lower_right";
+                            img.setImageResource(R.drawable.lowerright);
+                        }
+//                        else{
+//                            state = "upper_right";
+//                            img.setImageResource(R.drawable.upperright);
+//                        }
+
+                    }
+                    else { //if left
+                        if (states[1] == "left"){
+                            state = "upper_right";
+                            img.setImageResource(R.drawable.upperright);
+                        }
+//                        else{
+//                            state = "upper_right";
+//                            img.setImageResource(R.drawable.upperright);
+//                        }
+                    }
                 }
                 else if (rZ < -1.0f){
-                    getWindow().getDecorView().setBackgroundColor(Color.YELLOW);
+                    img.setImageResource(R.drawable.lowerleft);
                 }
             }
         });
@@ -94,7 +159,7 @@ public class GameActivity extends AppCompatActivity {
         if (player != null) {
             player.release();
             player = null;
-            Toast.makeText(this, "MediaPlayer released", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
     }
 
