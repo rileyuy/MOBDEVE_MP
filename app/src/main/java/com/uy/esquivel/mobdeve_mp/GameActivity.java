@@ -1,8 +1,10 @@
 package com.uy.esquivel.mobdeve_mp;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +12,7 @@ import com.uy.esquivel.mobdeve_mp.databinding.ActivityGameBinding;
 
 public class GameActivity extends AppCompatActivity {
 
+    MediaPlayer player;
     private ActivityGameBinding binding;
     private Accelerometer accelerometer;
     private Gyroscope gyroscope;
@@ -47,6 +50,8 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
+
+        play(view);
     }
 
     @Override
@@ -63,5 +68,39 @@ public class GameActivity extends AppCompatActivity {
 
         accelerometer.unregister();
         gyroscope.unregister();
+    }
+
+    public void play(View v) {
+        if (player == null) {
+            player = MediaPlayer.create(this, R.raw.ingamesong);
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    stopPlayer();
+                }
+            });
+        }
+
+        player.start();
+    }
+
+    public void pause(View v) {
+        if (player != null) {
+            player.pause();
+        }
+    }
+
+    private void stopPlayer() {
+        if (player != null) {
+            player.release();
+            player = null;
+            Toast.makeText(this, "MediaPlayer released", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopPlayer();
     }
 }
