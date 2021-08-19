@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer player;
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +46,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        pause(binding.getRoot());
+    protected void onStop() {
+        super.onStop();
+        stopPlayer();
     }
-
 
     public void play(View v) {
-        if (player == null) {
-            player = MediaPlayer.create(this, R.raw.menusong);
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    stopPlayer();
-                }
-            });
-        }
-
+        player = MediaPlayer.create(this, R.raw.menusong);
+        player.setLooping(true);
         player.start();
     }
-
-    public void pause(View v) {
-        if (player != null) {
-            player.pause();
-        }
-    }
-
+    
     private void stopPlayer() {
         if (player != null) {
             player.release();
@@ -75,11 +64,4 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopPlayer();
-    }
-
 }
