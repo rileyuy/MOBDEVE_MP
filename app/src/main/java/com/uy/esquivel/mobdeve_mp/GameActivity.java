@@ -8,8 +8,10 @@ import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -32,6 +34,7 @@ public class GameActivity extends AppCompatActivity {
     private String state;
     private int asteroid_loc;
     private int score;
+    private int hasEnded = 0;
 
     /*
         player_state = 0; player can move freely, after a set amount of time, player_state becomes 1
@@ -52,14 +55,32 @@ public class GameActivity extends AppCompatActivity {
 
         state = "lower_left";
         final ImageView img = findViewById(R.id.iv_ship);
-        img.setX(65);
-        img.setY(480);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        if (width == 480 && height == 854){
+            img.setX(65);
+            img.setY(480);
+        }else{
+            img.setX(640);
+            img.setY(450);
+        }
 
         /*
         lower left x:65, y:480
         lower right x:305, y:480
         upper left x:65, y:180
         upper right x:305, y:180
+         */
+
+        /*
+        lower left x:105, y:1180
+        lower right x:640, y:1180
+        upper left x:105, y:450
+        upper right x:640, y:450
          */
 
 
@@ -73,15 +94,26 @@ public class GameActivity extends AppCompatActivity {
                 VideoView asteroid = findViewById(R.id.vv_asteroid);
                 GifImageView giv = findViewById(R.id.giv_spacebg);
                 ImageView shp = findViewById(R.id.iv_ship);
+                Button playagain = findViewById(R.id.b_playagain);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        playagain.setVisibility(View.GONE);
+                    }
+                });
 
                 switch (player_state){
                     case 0:
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 shp.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
+                                giv.setImageResource(R.drawable.spacebg);
                                 giv.setVisibility(View.VISIBLE);
+
                             }
                         });
                         gyroscope.register();
@@ -117,6 +149,8 @@ public class GameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                giv.setVisibility(View.VISIBLE);
+                                shp.setVisibility(View.VISIBLE);
                                 asteroid.setVisibility(View.VISIBLE);
                             }
                         });
@@ -330,13 +364,14 @@ public class GameActivity extends AppCompatActivity {
 
                     case 2:
                         Log.i ("PLAYER STATE", "YOU LOSE!");
-                        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_and_explosion);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 grid.setVisibility(View.GONE);
                                 shp.setVisibility(View.GONE);
-                                giv.setVisibility(View.GONE);
+                                if (hasEnded == 0)
+                                    giv.setVisibility(View.GONE);
                                 asteroid.setVideoURI(uri);
                                 asteroid.start();
                             }
@@ -348,26 +383,28 @@ public class GameActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.explosion);
-                                        asteroid.setVideoURI(uri);
-
-                                    }
-                                });
-                            }
-                        });
-
-                        asteroid.start();
-                        asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
                                         giv.setImageResource(R.drawable.game_over_loop);
+                                        giv.setVisibility(View.VISIBLE);
+                                        playagain.setVisibility(View.VISIBLE);
+                                        asteroid.setVisibility(View.GONE);
+                                        stopPlayer();
+                                        playEnd(view);
+                                        hasEnded = 1;
                                     }
                                 });
                             }
                         });
+
+                        playagain.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                hasEnded = 0;
+                                player_state = 0;
+                            }
+                        });
+
 
                         break;
                     default:
@@ -391,6 +428,14 @@ public class GameActivity extends AppCompatActivity {
                     rotate downward = positive rX
                  */
 
+                /*
+                    HUAWEI P30 Lite reso coords
+                    lower left x:105, y:1180
+                    lower right x:640, y:1180
+                    upper left x:105, y:450
+                    upper right x:640, y:450
+                */
+
                 states = state.split ("_");
                 //Log.i ("COORDS", "rX " + rX + " rY " + rY);
                 if (Math.abs(rY)>Math.abs(rX)){
@@ -400,15 +445,28 @@ public class GameActivity extends AppCompatActivity {
                         if (states[0].equals("lower")){//if lower
                             if (states[1].equals("left")){
                                 state = "lower_right";
-                                img.setX(305);
-                                img.setY(480);
+                                if (width == 480 && height == 854){
+                                    img.setX(305);
+                                    img.setY(480);
+                                }else{
+                                    img.setX(640);
+                                    img.setY(1180);
+                                }
+
                             }
                         }
                         else { //if upper
                             if (states[1].equals("left")){
                                 state = "upper_right";
-                                img.setX(305);
-                                img.setY(180);
+                                if (width == 480 && height == 854){
+                                    img.setX(305);
+                                    img.setY(180);
+                                }
+                                else{
+                                    img.setX(640);
+                                    img.setY(450);
+                                }
+
                             }
                         }
                     }
@@ -419,15 +477,29 @@ public class GameActivity extends AppCompatActivity {
                         if (states[0].equals("lower")){//if lower
                             if (states[1].equals("right")){
                                 state = "lower_left";
-                                img.setX(65);
-                                img.setY(480);
+                                if (width == 480 && height == 854){
+                                    img.setX(65);
+                                    img.setY(480);
+                                }
+                                else{
+                                    img.setX(105);
+                                    img.setY(1180);
+                                }
+
                             }
                         }
                         else { //if upper
                             if (states[1].equals("right")){
                                 state = "upper_left";
-                                img.setX(65);
-                                img.setY(180);
+                                if (width == 480 && height == 854){
+                                    img.setX(65);
+                                    img.setY(180);
+                                }
+                                else{
+                                    img.setX(105);
+                                    img.setY(450);
+                                }
+
                             }
                         }
                     }
@@ -438,13 +510,27 @@ public class GameActivity extends AppCompatActivity {
                         if (states[0].equals("upper")){
                             if (states[1].equals("left")){
                                 state = "lower_left";
-                                img.setX(65);
-                                img.setY(480);
+                                if (width == 480 && height == 854){
+                                    img.setX(65);
+                                    img.setY(480);
+                                }
+                                else{
+                                    img.setX(105);
+                                    img.setY(1180);
+                                }
+
                             }
                             else{
                                 state = "lower_right";
-                                img.setX(305);
-                                img.setY(480);
+                                if (width == 480 && height == 854){
+                                    img.setX(305);
+                                    img.setY(480);
+                                }
+                                else{
+                                    img.setX(640);
+                                    img.setY(1180);
+                                }
+
                             }
                         }
                     }
@@ -453,13 +539,27 @@ public class GameActivity extends AppCompatActivity {
                         if (states[0].equals("lower")){
                             if (states[1].equals("left")){
                                 state = "upper_left";
-                                img.setX(65);
-                                img.setY(180);
+                                if (width == 480 && height == 854){
+                                    img.setX(65);
+                                    img.setY(180);
+                                }
+                                else{
+                                    img.setX(105);
+                                    img.setY(450);
+                                }
+
                             }
                             else{
                                 state = "upper_right";
-                                img.setX(305);
-                                img.setY(180);
+                                if (width == 480 && height == 854){
+                                    img.setX(305);
+                                    img.setY(180);
+                                }
+                                else{
+                                    img.setX(640);
+                                    img.setY(450);
+                                }
+
                             }
                         }
                     }
@@ -484,6 +584,12 @@ public class GameActivity extends AppCompatActivity {
 
     public void play(View v) {
         player = MediaPlayer.create(this, R.raw.ingamesong);
+        player.setLooping(true);
+        player.start();
+    }
+
+    public void playEnd(View v) {
+        player = MediaPlayer.create(this, R.raw.gameover);
         player.setLooping(true);
         player.start();
     }
