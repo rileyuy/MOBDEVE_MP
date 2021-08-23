@@ -96,19 +96,13 @@ public class GameActivity extends AppCompatActivity {
                 ImageView shp = findViewById(R.id.iv_ship);
                 Button playagain = findViewById(R.id.b_playagain);
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        playagain.setVisibility(View.GONE);
-                    }
-                });
-
                 switch (player_state){
                     case 0:
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                playagain.setVisibility(View.GONE);
                                 shp.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
                                 giv.setImageResource(R.drawable.spacebg);
@@ -598,7 +592,7 @@ public class GameActivity extends AppCompatActivity {
         if (player != null) {
             player.release();
             player = null;
-            Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
     }
 
