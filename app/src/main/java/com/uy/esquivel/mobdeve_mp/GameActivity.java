@@ -50,7 +50,7 @@ public class GameActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        accelerometer = new Accelerometer(this);
+        //accelerometer = new Accelerometer(this);
         gyroscope = new Gyroscope(this);
 
         state = "lower_left";
@@ -82,7 +82,6 @@ public class GameActivity extends AppCompatActivity {
         upper left x:105, y:450
         upper right x:640, y:450
          */
-
 
         Timer t = new Timer();
 
@@ -396,6 +395,8 @@ public class GameActivity extends AppCompatActivity {
                             {
                                 hasEnded = 0;
                                 player_state = 0;
+                                stopPlayer();
+                                play(view);
                             }
                         });
 
