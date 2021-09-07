@@ -1,6 +1,7 @@
 package com.uy.esquivel.mobdeve_mp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -63,5 +64,55 @@ public class MainActivity extends AppCompatActivity {
             player = null;
             //Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void init(){
+
+        binding..setLayoutManager ( new LinearLayoutManager(getApplicationContext()));
+        binding.rvDatalist.setAdapter(userAdapter);
+
+        binding.saveRecord.setOnClickListener (view -> {
+            User user = new User();
+
+            user.setId(Integer.parseInt(binding.uId.getText().toString()));
+            user.setName (binding.uName.getText().toString());
+            user.setEmail(binding.uEmail.getText().toString());
+            userDAO.addUser(user);
+            userAdapter.addUsers(userDAO.getUsers());
+        });
+
+        binding.viewRecord.setOnClickListener(view -> {
+            User user = userDAO.getUser(Integer.parseInt(binding.uId.getText().toString()));
+            binding.uName.setText(user.getName());
+            binding.uEmail.setText(user.getEmail());
+        });
+
+        binding.updateRecord.setOnClickListener(view -> {
+            User user = new User();
+            user.setId(Integer.parseInt((binding.uId.getText().toString())));
+            user.setName((binding.uName.getText().toString()));
+            user.setEmail(binding.uEmail.getText().toString());
+            int status = userDAO.updateUser(user);
+            if (status > 0){
+                userAdapter.addUsers(userDAO.getUsers());
+            }
+            else{
+                Toast.makeText(getApplicationContext(),
+                        "User not found.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        binding.deleteRecord.setOnClickListener(view -> {
+            int status = userDAO.deleteUser(Integer.parseInt(binding.uId.getText().toString()));
+            if (status > 0){
+                userAdapter.addUsers(userDAO.getUsers());
+            }
+            else{
+                Toast.makeText(getApplicationContext(),
+                        "User not found.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

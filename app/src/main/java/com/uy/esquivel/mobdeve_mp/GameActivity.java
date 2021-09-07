@@ -95,6 +95,7 @@ public class GameActivity extends AppCompatActivity {
                 ImageView shp = findViewById(R.id.iv_ship);
                 Button playagain = findViewById(R.id.b_playagain);
 
+
                 switch (player_state){
                     case 0:
 
@@ -414,6 +415,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onRotation(float rX, float rY, float rZ) {
                 String states[] = new String[2];
+                ImageView hand = findViewById(R.id.iv_hand);
 
                 /*
                     rotate right = positive rY
@@ -447,6 +449,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(640);
                                     img.setY(1180);
                                 }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_right);
+                                    }
+                                });
 
                             }
                         }
@@ -461,7 +469,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(640);
                                     img.setY(450);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_right);
+                                    }
+                                });
                             }
                         }
                     }
@@ -480,7 +493,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(105);
                                     img.setY(1180);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_left);
+                                    }
+                                });
                             }
                         }
                         else { //if upper
@@ -494,7 +512,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(105);
                                     img.setY(450);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_left);
+                                    }
+                                });
                             }
                         }
                     }
@@ -513,7 +536,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(105);
                                     img.setY(1180);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_down);
+                                    }
+                                });
                             }
                             else{
                                 state = "lower_right";
@@ -525,7 +553,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(640);
                                     img.setY(1180);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_down);
+                                    }
+                                });
                             }
                         }
                     }
@@ -542,7 +575,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(105);
                                     img.setY(450);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_up);
+                                    }
+                                });
                             }
                             else{
                                 state = "upper_right";
@@ -554,7 +592,12 @@ public class GameActivity extends AppCompatActivity {
                                     img.setX(640);
                                     img.setY(450);
                                 }
-
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hand.setImageResource(R.drawable.hand_up);
+                                    }
+                                });
                             }
                         }
                     }
