@@ -30,7 +30,7 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/giv_spacebg"
-        android:src="@drawable/spacebg"
+        android:src="@drawable/game_over"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -80,6 +80,7 @@
         app:layout_constraintTop_toTopOf="parent" />
     
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_scores"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="@color/white"
