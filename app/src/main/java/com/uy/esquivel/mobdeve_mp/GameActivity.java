@@ -4,28 +4,20 @@ import java.lang.Math;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.uy.esquivel.mobdeve_mp.adapter.ScoreAdapter;
-import com.uy.esquivel.mobdeve_mp.dao.ScoreDAO;
-import com.uy.esquivel.mobdeve_mp.dao.ScoreDAOFirebaseImpl;
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityGameBinding;
-import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 
 import pl.droidsonroids.gif.GifImageView;
 

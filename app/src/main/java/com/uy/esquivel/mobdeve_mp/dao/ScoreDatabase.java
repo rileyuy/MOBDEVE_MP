@@ -14,8 +14,6 @@ public class ScoreDatabase extends SQLiteOpenHelper {
     public static final String SCORE_NAME ="name";
     public static final String SCORE_SCORE ="score";
 
-
-
     public static final String CREATE_SCORE_TABLE =
             "create table " + TABLE_SCORES +
                     " ( "
