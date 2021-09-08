@@ -45,8 +45,8 @@ public class ScoreAdapter
     public ScoreAdapter.ScoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.score_list_item, parent, false);
-        ScoreViewHolder userViewHolder = new ScoreViewHolder(view);
-        return userViewHolder;
+        ScoreViewHolder scoreViewHolder = new ScoreViewHolder(view);
+        return scoreViewHolder;
     }
 
     @Override
