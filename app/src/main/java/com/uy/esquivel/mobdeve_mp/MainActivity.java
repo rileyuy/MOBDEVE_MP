@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer player;
     private ActivityMainBinding binding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

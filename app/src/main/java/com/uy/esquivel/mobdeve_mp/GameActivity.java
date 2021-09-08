@@ -12,24 +12,32 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.uy.esquivel.mobdeve_mp.adapter.ScoreAdapter;
+import com.uy.esquivel.mobdeve_mp.dao.ScoreDAO;
+import com.uy.esquivel.mobdeve_mp.dao.ScoreDAOFirebaseImpl;
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityGameBinding;
+import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 
 import pl.droidsonroids.gif.GifImageView;
 
 
 public class GameActivity extends AppCompatActivity {
 
+    private ScoreAdapter scoreAdapter;
     MediaPlayer player;
     private ActivityGameBinding binding;
     private Accelerometer accelerometer;
     private Gyroscope gyroscope;
+
 
     //game-related variables
     private String state;
@@ -50,6 +58,8 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        //init();
 
         //accelerometer = new Accelerometer(this);
         gyroscope = new Gyroscope(this);
@@ -94,8 +104,8 @@ public class GameActivity extends AppCompatActivity {
                 VideoView asteroid = findViewById(R.id.vv_asteroid);
                 GifImageView giv = findViewById(R.id.giv_spacebg);
                 ImageView shp = findViewById(R.id.iv_ship);
-                Button playagain = findViewById(R.id.b_playagain);
-
+                ImageButton playagain = findViewById(R.id.ib_playagain);
+//                RecyclerView rvScore = findViewById(R.id.rv_scores);
 
                 switch (player_state){
                     case 0:
@@ -103,6 +113,7 @@ public class GameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+//                                rvScore.setVisibility(View.GONE);
                                 playagain.setVisibility(View.GONE);
                                 shp.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
@@ -645,53 +656,55 @@ public class GameActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    private void init(){
+//    private void init(){
+//        ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
+//        this.scoreAdapter = new ScoreAdapter(getApplicationContext(),
+//                scoreDAO.getTop10Scores());
+//        binding.rvScores.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
+//        binding.rvScores.setAdapter(scoreAdapter);
 
-        binding.setLayoutManager ( new LinearLayoutManager(getApplicationContext()));
-        binding.rvScores.setAdapter(userAdapter);
+//        binding.saveRecord.setOnClickListener (view -> {
+//            User user = new User();
+//
+//            user.setId(Integer.parseInt(binding.uId.getText().toString()));
+//            user.setName (binding.uName.getText().toString());
+//            user.setEmail(binding.uEmail.getText().toString());
+//            scoreDAO.addUser(user);
+//            scoreAdapter.addScores(scoreDAO.getTop10Scores());
+//        });
+//
+//        binding.viewRecord.setOnClickListener(view -> {
+//            User user = scoreDAO.getUser(Integer.parseInt(binding.uId.getText().toString()));
+//            binding.uName.setText(user.getName());
+//            binding.uEmail.setText(user.getEmail());
+//        });
 
-        binding.saveRecord.setOnClickListener (view -> {
-            User user = new User();
+//        binding.updateRecord.setOnClickListener(view -> {
+//            User user = new User();
+//            user.setId(Integer.parseInt((binding.uId.getText().toString())));
+//            user.setName((binding.uName.getText().toString()));
+//            user.setEmail(binding.uEmail.getText().toString());
+//            int status = scoreDAO.updateUser(user);
+//            if (status > 0){
+//                scoreAdapter.addScores(scoreDAO.getTop10Scores());
+//            }
+//            else{
+//                Toast.makeText(getApplicationContext(),
+//                        "User not found.",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-            user.setId(Integer.parseInt(binding.uId.getText().toString()));
-            user.setName (binding.uName.getText().toString());
-            user.setEmail(binding.uEmail.getText().toString());
-            userDAO.addUser(user);
-            userAdapter.addUsers(userDAO.getUsers());
-        });
-
-        binding.viewRecord.setOnClickListener(view -> {
-            User user = userDAO.getUser(Integer.parseInt(binding.uId.getText().toString()));
-            binding.uName.setText(user.getName());
-            binding.uEmail.setText(user.getEmail());
-        });
-
-        binding.updateRecord.setOnClickListener(view -> {
-            User user = new User();
-            user.setId(Integer.parseInt((binding.uId.getText().toString())));
-            user.setName((binding.uName.getText().toString()));
-            user.setEmail(binding.uEmail.getText().toString());
-            int status = userDAO.updateUser(user);
-            if (status > 0){
-                userAdapter.addUsers(userDAO.getUsers());
-            }
-            else{
-                Toast.makeText(getApplicationContext(),
-                        "User not found.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        binding.deleteRecord.setOnClickListener(view -> {
-            int status = userDAO.deleteUser(Integer.parseInt(binding.uId.getText().toString()));
-            if (status > 0){
-                userAdapter.addUsers(userDAO.getUsers());
-            }
-            else{
-                Toast.makeText(getApplicationContext(),
-                        "User not found.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//        binding.deleteRecord.setOnClickListener(view -> {
+//            int status = scoreDAO.deleteUser(Integer.parseInt(binding.uId.getText().toString()));
+//            if (status > 0){
+//                scoreAdapter.addScores(scoreDAO.getTop10Scores());
+//            }
+//            else{
+//                Toast.makeText(getApplicationContext(),
+//                        "User not found.",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }
