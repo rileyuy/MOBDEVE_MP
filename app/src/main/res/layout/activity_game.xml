@@ -4,22 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_player_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/tv_player_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </androidx.recyclerview.widget.RecyclerView>
-
     <VideoView
         android:id="@+id/vv_asteroid"
         android:layout_width="fill_parent"
@@ -49,11 +33,11 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"/>
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/iv_bg"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/spaceship"
+        android:src="@drawable/power_3_spaceship"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -64,12 +48,11 @@
         android:id="@+id/iv_hand"
         android:layout_width="150dp"
         android:layout_height="120dp"
-        android:src="@drawable/hand_up"
-        android:layout_marginLeft="38dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="66dp"
+        android:src="@drawable/hand_still"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
         android:id="@+id/iv_ship"
@@ -102,33 +85,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:scaleType="fitCenter"
             android:background="@null"/>
-<!--    <Button-->
-<!--        android:id="@+id/b_playagain"-->
-<!--        android:layout_width="150dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:text="Play Again?"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:layout_marginTop="100dp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textStyle="bold"-->
-<!--        android:backgroundTint="@color/white"/>-->
-
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_warning"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="20dp"-->
-<!--        android:textAlignment="center"-->
-<!--        android:layout_marginBottom="80dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
