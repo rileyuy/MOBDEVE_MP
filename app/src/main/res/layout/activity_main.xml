@@ -15,16 +15,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/power_3_spaceship"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:src="@drawable/spaceship"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"/>
 
     <ImageView
         android:id="@+id/iv_logo"
@@ -48,15 +47,36 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="100dp"/>
 
-    <ImageView
-        android:id="@+id/iv_hand"
-        android:layout_width="150dp"
-        android:layout_height="120dp"
-        android:src="@drawable/hand_still"
-        android:layout_marginLeft="66dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+<!--    <Button-->
+<!--        android:id="@+id/play"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:onClick="play"-->
+<!--        android:text="Play"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/b_start"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/pause"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:onClick="pause"-->
+<!--        android:text="Pause"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/play"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
+
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:onClick="stop"-->
+<!--        android:text="Stop"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/pause"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"/>-->
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

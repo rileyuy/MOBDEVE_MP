@@ -1,7 +1,6 @@
 package com.uy.esquivel.mobdeve_mp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -20,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer player;
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,4 @@ public class MainActivity extends AppCompatActivity {
             //Toast.makeText(this, "MediaPlayer terminated", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }
