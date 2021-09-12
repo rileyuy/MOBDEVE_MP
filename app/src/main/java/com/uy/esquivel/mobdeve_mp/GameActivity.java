@@ -222,10 +222,13 @@ public class GameActivity extends AppCompatActivity {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-
+//                                                    player.reset();
+//                                                    player.release();
+//                                                    player=null;
                                                     asteroid.setVisibility(View.GONE);
-                                                    //giv.setVisibility(View.VISIBLE);
                                                     spacebg.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
+
                                                 }
                                             });
                                         }
@@ -332,9 +335,13 @@ public class GameActivity extends AppCompatActivity {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
+
                                                     asteroid.setVisibility(View.GONE);
-                                                    //giv.setVisibility(View.VISIBLE);
+                                                    spacebg.setImageResource(R.drawable.high_score);
                                                     spacebg.setVisibility(View.VISIBLE);
+
+                                                    //giv.setVisibility(View.VISIBLE);
+
                                                 }
                                             });
                                         }
@@ -426,14 +433,31 @@ public class GameActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         //giv.setImageResource(R.drawable.game_over_loop);
-                                        //giv.setVisibility(View.VISIBLE);
-                                        playagain.setVisibility(View.VISIBLE);
+                                        //giv.setVisibility(View.VISIBLE);s
+                                        spacebg.setImageResource(R.drawable.high_score);
+                                        enterName.setVisibility(View.VISIBLE);
+                                        enter.setVisibility(View.VISIBLE);
+
+                                        spacebg.setVisibility(View.VISIBLE);
+                                        //playagain.setVisibility(View.VISIBLE);
                                         asteroid.setVisibility(View.GONE);
                                         stopPlayer();
                                         playEnd(view);
                                         hasEnded = 1;
                                     }
                                 });
+                            }
+                        });
+
+                        enter.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                playagain.setVisibility(View.VISIBLE);
+                                spacebg.setImageResource(R.drawable.game_over);
+                                rvScore.setVisibility(View.VISIBLE);
+                                enterName.setVisibility(View.GONE);
+                                enter.setVisibility(View.GONE);
                             }
                         });
 
