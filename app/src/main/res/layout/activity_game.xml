@@ -48,7 +48,7 @@
         android:id="@+id/iv_bg"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:src="@drawable/spaceship"
+        android:src="@drawable/power_3_spaceship"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

@@ -131,7 +131,7 @@ public class GameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                //hand.setImageResource(R.drawable.);
+                                hand.setImageResource(R.drawable.hand_still);
                                 rvScore.setVisibility(View.GONE);
                                 playagain.setVisibility(View.GONE);
                                 shp.setVisibility(View.VISIBLE);
