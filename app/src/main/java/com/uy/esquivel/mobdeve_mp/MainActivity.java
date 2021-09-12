@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         bStart.setOnClickListener(newView -> {
             Intent i = new Intent (MainActivity.this, GameActivity.class);
             startActivity (i);
+            stopPlayer();
         });
 
         play(view);

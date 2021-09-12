@@ -26,6 +26,7 @@ import com.uy.esquivel.mobdeve_mp.dao.ScoreDAO;
 import com.uy.esquivel.mobdeve_mp.dao.ScoreDAOFirebaseImpl;
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityGameBinding;
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
+import com.uy.esquivel.mobdeve_mp.model.Score;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -42,7 +43,7 @@ public class GameActivity extends AppCompatActivity {
     //game-related variables
     private String state;
     private int asteroid_loc;
-    private int score;
+    private int score = 0;
     private int hasEnded = 0;
 
     /*
@@ -58,9 +59,31 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        play(binding.getRoot());
 
-        //init();
+        ImageView grid = findViewById(R.id.iv_grid);
+        ImageView shp = findViewById(R.id.iv_ship);
+        ImageView spacebg = findViewById(R.id.iv_spacebg);
 
+        VideoView asteroid = findViewById(R.id.vv_asteroid);
+
+        //GifImageView giv = findViewById(R.id.giv_spacebg);
+
+        ImageButton playagain = findViewById(R.id.ib_playagain);
+        ImageButton enter = findViewById(R.id.ib_enter);
+
+        RecyclerView rvScore = findViewById(R.id.rv_scores);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                enter.setVisibility(View.GONE);
+            }
+        });
+
+
+        init();
+        play(binding.getRoot());
         //accelerometer = new Accelerometer(this);
         gyroscope = new Gyroscope(this);
 
@@ -100,12 +123,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void run()
             {
-                ImageView grid = findViewById(R.id.iv_grid);
-                VideoView asteroid = findViewById(R.id.vv_asteroid);
-                GifImageView giv = findViewById(R.id.giv_spacebg);
-                ImageView shp = findViewById(R.id.iv_ship);
-                ImageButton playagain = findViewById(R.id.ib_playagain);
-//                RecyclerView rvScore = findViewById(R.id.rv_scores);
+
 
                 switch (player_state){
                     case 0:
@@ -113,12 +131,13 @@ public class GameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                rvScore.setVisibility(View.GONE);
+                               rvScore.setVisibility(View.GONE);
                                 playagain.setVisibility(View.GONE);
                                 shp.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
-                                giv.setImageResource(R.drawable.spacebg);
-                                giv.setVisibility(View.VISIBLE);
+                                //giv.setImageResource(R.drawable.spacebg);
+                                //giv.setVisibility(View.VISIBLE);
+                                spacebg.setVisibility(View.VISIBLE);
 
                             }
                         });
@@ -155,7 +174,7 @@ public class GameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                giv.setVisibility(View.VISIBLE);
+                                //giv.setVisibility(View.VISIBLE);
                                 shp.setVisibility(View.VISIBLE);
                                 asteroid.setVisibility(View.VISIBLE);
                             }
@@ -169,7 +188,8 @@ public class GameActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            giv.setVisibility(View.GONE);
+                                            //giv.setVisibility(View.GONE);
+                                            spacebg.setVisibility(View.GONE);
                                         }
                                     });
                                     Uri uri;
@@ -203,7 +223,8 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
-                                                    giv.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
+                                                    spacebg.setVisibility(View.VISIBLE);
                                                 }
                                             });
                                         }
@@ -216,10 +237,13 @@ public class GameActivity extends AppCompatActivity {
                                 if (state.equals("upper_right"))
                                     player_state = 2;
                                 else{
+                                    score++;
+
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            giv.setVisibility(View.GONE);
+                                            //giv.setVisibility(View.GONE);
+                                            spacebg.setVisibility(View.GONE);
                                         }
                                     });
 
@@ -255,7 +279,8 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
-                                                    giv.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
+                                                    spacebg.setVisibility(View.VISIBLE);
                                                 }
                                             });
                                         }
@@ -268,10 +293,13 @@ public class GameActivity extends AppCompatActivity {
                                 if (state.equals("lower_left"))
                                     player_state = 2;
                                 else{
+                                    score++;
+
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            giv.setVisibility(View.GONE);
+                                            //giv.setVisibility(View.GONE);
+                                            spacebg.setVisibility(View.GONE);
                                         }
                                     });
                                     Uri uri;
@@ -303,9 +331,9 @@ public class GameActivity extends AppCompatActivity {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-
                                                     asteroid.setVisibility(View.GONE);
-                                                    giv.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
+                                                    spacebg.setVisibility(View.VISIBLE);
                                                 }
                                             });
                                         }
@@ -318,10 +346,13 @@ public class GameActivity extends AppCompatActivity {
                                 if (state.equals("lower_right"))
                                     player_state = 2;
                                 else{
+                                    score++;
+
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            giv.setVisibility(View.GONE);
+                                            //giv.setVisibility(View.GONE);
+                                            spacebg.setVisibility(View.GONE);
                                         }
                                     });
                                     Uri uri;
@@ -355,7 +386,8 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
-                                                    giv.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
+                                                    spacebg.setVisibility(View.VISIBLE);
                                                 }
                                             });
                                         }
@@ -376,8 +408,11 @@ public class GameActivity extends AppCompatActivity {
                             public void run() {
                                 grid.setVisibility(View.GONE);
                                 shp.setVisibility(View.GONE);
-                                if (hasEnded == 0)
-                                    giv.setVisibility(View.GONE);
+                                if (hasEnded == 0){
+                                    //giv.setVisibility(View.GONE);
+                                    spacebg.setVisibility(View.GONE);
+                                }
+
                                 asteroid.setVideoURI(uri);
                                 asteroid.start();
                             }
@@ -389,8 +424,8 @@ public class GameActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        giv.setImageResource(R.drawable.game_over_loop);
-                                        giv.setVisibility(View.VISIBLE);
+                                        //giv.setImageResource(R.drawable.game_over_loop);
+                                        //giv.setVisibility(View.VISIBLE);
                                         playagain.setVisibility(View.VISIBLE);
                                         asteroid.setVisibility(View.GONE);
                                         stopPlayer();
@@ -623,6 +658,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         gyroscope.register();
+        play(binding.getRoot());
     }
 
     @Override
@@ -656,55 +692,26 @@ public class GameActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-//    private void init(){
-//        ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
-//        this.scoreAdapter = new ScoreAdapter(getApplicationContext(),
-//                scoreDAO.getTop10Scores());
-//        binding.rvScores.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
-//        binding.rvScores.setAdapter(scoreAdapter);
+    private void init(){
+        ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
+        this.scoreAdapter = new ScoreAdapter(getApplicationContext(),
+                scoreDAO.getTop10Scores());
+        binding.rvScores.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
+        binding.rvScores.setAdapter(scoreAdapter);
 
-//        binding.saveRecord.setOnClickListener (view -> {
-//            User user = new User();
-//
-//            user.setId(Integer.parseInt(binding.uId.getText().toString()));
-//            user.setName (binding.uName.getText().toString());
-//            user.setEmail(binding.uEmail.getText().toString());
-//            scoreDAO.addUser(user);
-//            scoreAdapter.addScores(scoreDAO.getTop10Scores());
-//        });
-//
+        binding.ibEnter.setOnClickListener (view -> {
+            Score playerScore = new Score();
+
+            playerScore.setScore(score);
+            playerScore.setName (binding.etName.getText().toString());
+            scoreDAO.addScore(playerScore);
+            scoreAdapter.addScores(scoreDAO.getTop10Scores());
+        });
+
 //        binding.viewRecord.setOnClickListener(view -> {
 //            User user = scoreDAO.getUser(Integer.parseInt(binding.uId.getText().toString()));
 //            binding.uName.setText(user.getName());
 //            binding.uEmail.setText(user.getEmail());
 //        });
-
-//        binding.updateRecord.setOnClickListener(view -> {
-//            User user = new User();
-//            user.setId(Integer.parseInt((binding.uId.getText().toString())));
-//            user.setName((binding.uName.getText().toString()));
-//            user.setEmail(binding.uEmail.getText().toString());
-//            int status = scoreDAO.updateUser(user);
-//            if (status > 0){
-//                scoreAdapter.addScores(scoreDAO.getTop10Scores());
-//            }
-//            else{
-//                Toast.makeText(getApplicationContext(),
-//                        "User not found.",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-//        binding.deleteRecord.setOnClickListener(view -> {
-//            int status = scoreDAO.deleteUser(Integer.parseInt(binding.uId.getText().toString()));
-//            if (status > 0){
-//                scoreAdapter.addScores(scoreDAO.getTop10Scores());
-//            }
-//            else{
-//                Toast.makeText(getApplicationContext(),
-//                        "User not found.",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    }
 }
