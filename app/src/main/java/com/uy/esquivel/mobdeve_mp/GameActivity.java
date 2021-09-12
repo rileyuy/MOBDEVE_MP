@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,7 +26,6 @@ import com.uy.esquivel.mobdeve_mp.adapter.ScoreAdapter;
 import com.uy.esquivel.mobdeve_mp.dao.ScoreDAO;
 import com.uy.esquivel.mobdeve_mp.dao.ScoreDAOFirebaseImpl;
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityGameBinding;
-import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 import com.uy.esquivel.mobdeve_mp.model.Score;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -59,11 +59,11 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        play(binding.getRoot());
 
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView shp = findViewById(R.id.iv_ship);
         ImageView spacebg = findViewById(R.id.iv_spacebg);
+        ImageView hand = findViewById(R.id.iv_hand);
 
         VideoView asteroid = findViewById(R.id.vv_asteroid);
 
@@ -74,16 +74,18 @@ public class GameActivity extends AppCompatActivity {
 
         RecyclerView rvScore = findViewById(R.id.rv_scores);
 
+        EditText enterName = findViewById(R.id.et_name);
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 enter.setVisibility(View.GONE);
+                enterName.setVisibility(View.GONE);
             }
         });
 
 
         init();
-        play(binding.getRoot());
         //accelerometer = new Accelerometer(this);
         gyroscope = new Gyroscope(this);
 
@@ -123,15 +125,14 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void run()
             {
-
-
                 switch (player_state){
                     case 0:
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                               rvScore.setVisibility(View.GONE);
+                                //hand.setImageResource(R.drawable.);
+                                rvScore.setVisibility(View.GONE);
                                 playagain.setVisibility(View.GONE);
                                 shp.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
@@ -462,7 +463,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onRotation(float rX, float rY, float rZ) {
                 String states[] = new String[2];
-                ImageView hand = findViewById(R.id.iv_hand);
+
 
                 /*
                     rotate right = positive rY
@@ -651,7 +652,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
-        play(view);
+        //play(view);
     }
 
     @Override
