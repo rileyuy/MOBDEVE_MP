@@ -1,17 +1,12 @@
 package com.uy.esquivel.mobdeve_mp;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.MediaController;
-import android.widget.Toast;
-import android.widget.VideoView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 

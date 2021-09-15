@@ -46,7 +46,7 @@ public class ScoreAdapter
     @Override
     public void onBindViewHolder(ScoreAdapter.ScoreViewHolder holder, int position) {
         holder.tv_name.setText(scoresArrayList.get(position).getName());
-        holder.tv_score.setText(scoresArrayList.get(position).getScore()+ " pts");
+        holder.tv_score.setText(scoresArrayList.get(position).getScore() + "");
     }
 
     protected class ScoreViewHolder extends RecyclerView.ViewHolder{
