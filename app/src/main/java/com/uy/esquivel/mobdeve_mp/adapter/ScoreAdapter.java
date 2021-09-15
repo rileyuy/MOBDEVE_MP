@@ -28,13 +28,7 @@ public class ScoreAdapter
     public void addScores(ArrayList<Score> scoresArrayList){
         this.scoresArrayList.clear();
         this.scoresArrayList.addAll(scoresArrayList);
-        notifyDataSetChanged();
-    }
-
-    public void addScore(Score score){
-        scoresArrayList.add(0, score);
-        notifyItemInserted(0);
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -52,7 +46,7 @@ public class ScoreAdapter
     @Override
     public void onBindViewHolder(ScoreAdapter.ScoreViewHolder holder, int position) {
         holder.tv_name.setText(scoresArrayList.get(position).getName());
-        holder.tv_score.setText(scoresArrayList.get(position).getScore()+"");
+        holder.tv_score.setText(scoresArrayList.get(position).getScore()+ " pts");
     }
 
     protected class ScoreViewHolder extends RecyclerView.ViewHolder{

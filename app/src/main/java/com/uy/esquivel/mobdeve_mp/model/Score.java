@@ -1,15 +1,27 @@
 package com.uy.esquivel.mobdeve_mp.model;
 
-public class Score {
+import java.io.Serializable;
+import java.util.Comparator;
+
+public class Score implements Serializable {
+
     private String name = "";
-    private int Score = 0;
+    private int score = 0;
+
+    public Score() {
+    }
+
+    public Score(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
 
     public String getName() {
         return name;
     }
 
     public int getScore() {
-        return Score;
+        return this.score;
     }
 
     public void setName(String name) {
@@ -17,6 +29,19 @@ public class Score {
     }
 
     public void setScore(int score) {
-        Score = score;
+        this.score = score;
+    }
+
+
+    @Override
+    public String toString (){
+        return this.name + "'s score is: " + this.score + "!";
     }
 }
+
+class ScoreComparator implements Comparator<Score> {
+    public int compare(Score score1, Score score2) {
+        return score1.getScore() - score2.getScore();
+    }
+}
+

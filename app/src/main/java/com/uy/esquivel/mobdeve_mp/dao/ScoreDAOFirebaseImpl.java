@@ -89,8 +89,11 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
             public void onDataChange(DataSnapshot snapshot) {
                 for(DataSnapshot data: snapshot.getChildren()){
                     Score score = new Score();
+
                     score.setScore(data.child("score").getValue(Integer.class));
                     score.setName(data.child("name").getValue(String.class));
+
+                    Log.i ("SCORE IN FIREBASE DAO", score.getName() +  "'s score is: " + score.getScore() + "!");
                     result.add(score);
                 }
             }
@@ -100,6 +103,7 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
 
             }
         });
+
 
         return result;
     }

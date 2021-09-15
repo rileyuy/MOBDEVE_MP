@@ -1,6 +1,8 @@
 package com.uy.esquivel.mobdeve_mp;
 
 import java.lang.Math;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,6 +10,7 @@ import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -66,6 +70,8 @@ public class GameActivity extends AppCompatActivity {
         ImageView hand = findViewById(R.id.iv_hand);
 
         VideoView asteroid = findViewById(R.id.vv_asteroid);
+
+        TextView showScore = findViewById(R.id.tv_showScore);
 
         //GifImageView giv = findViewById(R.id.giv_spacebg);
 
@@ -186,6 +192,7 @@ public class GameActivity extends AppCompatActivity {
                                 if (state.equals("upper_left"))
                                     player_state = 2;
                                 else{
+                                    score++;
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -406,6 +413,12 @@ public class GameActivity extends AppCompatActivity {
                                 break;
                             default:
                         }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showScore.setText(score+"");
+                            }
+                        });
                         break;
 
                     case 2:
@@ -449,17 +462,22 @@ public class GameActivity extends AppCompatActivity {
                             }
                         });
 
-                        enter.setOnClickListener(new View.OnClickListener(){
-                            @Override
-                            public void onClick(View v)
-                            {
-                                playagain.setVisibility(View.VISIBLE);
-                                spacebg.setImageResource(R.drawable.game_over);
-                                rvScore.setVisibility(View.VISIBLE);
-                                enterName.setVisibility(View.GONE);
-                                enter.setVisibility(View.GONE);
-                            }
-                        });
+//                        enter.setOnClickListener(new View.OnClickListener(){
+//                            @Override
+//                            public void onClick(View v)
+//                            {
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        playagain.setVisibility(View.VISIBLE);
+//                                        spacebg.setImageResource(R.drawable.game_over);
+//                                        rvScore.setVisibility(View.VISIBLE);
+//                                        enterName.setVisibility(View.GONE);
+//                                        enter.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                            }
+//                        });
 
                         playagain.setOnClickListener(new View.OnClickListener()
                         {
@@ -470,13 +488,11 @@ public class GameActivity extends AppCompatActivity {
                                 player_state = 0;
                                 stopPlayer();
                                 play(view);
+                                spacebg.setImageResource(R.drawable.spacebgtemp);
                             }
                         });
-
-
                         break;
                     default:
-
                 }
             }
         };
@@ -719,24 +735,56 @@ public class GameActivity extends AppCompatActivity {
 
     private void init(){
         ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
-        this.scoreAdapter = new ScoreAdapter(getApplicationContext(),
+        scoreAdapter = new ScoreAdapter(getApplicationContext(),
                 scoreDAO.getTop10Scores());
-        binding.rvScores.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
-        binding.rvScores.setAdapter(scoreAdapter);
+
+        RecyclerView rvScore = findViewById(R.id.rv_scores);
+
+        rvScore.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
+        rvScore.setAdapter(scoreAdapter);
+//        binding.rvScores.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
+//        binding.rvScores.setAdapter(scoreAdapter);
 
         binding.ibEnter.setOnClickListener (view -> {
+            TextView scoreText = findViewById(R.id.tv_showScore);
+            //scoreText.setText(binding.etName.getText().toString() + "has score: " + score);
             Score playerScore = new Score();
-
             playerScore.setScore(score);
             playerScore.setName (binding.etName.getText().toString());
             scoreDAO.addScore(playerScore);
             scoreAdapter.addScores(scoreDAO.getTop10Scores());
-        });
 
-//        binding.viewRecord.setOnClickListener(view -> {
-//            User user = scoreDAO.getUser(Integer.parseInt(binding.uId.getText().toString()));
-//            binding.uName.setText(user.getName());
-//            binding.uEmail.setText(user.getEmail());
-//        });
+//            for (int i = 0; i<scoreDAO.getTop10Scores().size(); i++)
+//                Log.i ("SCORE FOUND", scoreDAO.getTop10Scores().toString());
+
+            ImageButton playagain = findViewById(R.id.ib_playagain);
+            ImageView spacebg = findViewById(R.id.iv_spacebg);
+
+            EditText enterName = findViewById(R.id.et_name);
+            ImageButton enter = findViewById(R.id.ib_enter);
+
+            scoreAdapter.addScores(scoreDAO.getTop10Scores());
+            scoreAdapter.notifyDataSetChanged();
+
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            playagain.setVisibility(View.VISIBLE);
+                            spacebg.setImageResource(R.drawable.game_over);
+                            rvScore.setVisibility(View.VISIBLE);
+                            enterName.setVisibility(View.GONE);
+                            enter.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            }, 2000);
+
+
+        });
     }
 }
