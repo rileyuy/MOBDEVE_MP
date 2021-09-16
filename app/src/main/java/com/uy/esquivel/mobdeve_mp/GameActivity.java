@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.Intent;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -234,6 +235,7 @@ public class GameActivity extends AppCompatActivity {
 //                                                    player.release();
 //                                                    player=null;
                                                     asteroid.setVisibility(View.GONE);
+//                                                    asteroid.stopPlayback();
                                                     spacebg.setVisibility(View.VISIBLE);
                                                     //giv.setVisibility(View.VISIBLE);
 
@@ -291,8 +293,9 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
-                                                    //giv.setVisibility(View.VISIBLE);
+//                                                    asteroid.stopPlayback();
                                                     spacebg.setVisibility(View.VISIBLE);
+                                                    //giv.setVisibility(View.VISIBLE);
                                                 }
                                             });
                                         }
@@ -345,7 +348,7 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
-                                                    spacebg.setImageResource(R.drawable.high_score);
+//                                                    asteroid.stopPlayback();
                                                     spacebg.setVisibility(View.VISIBLE);
 
                                                     //giv.setVisibility(View.VISIBLE);
@@ -402,6 +405,7 @@ public class GameActivity extends AppCompatActivity {
                                                 public void run() {
 
                                                     asteroid.setVisibility(View.GONE);
+//                                                    asteroid.stopPlayback();
                                                     //giv.setVisibility(View.VISIBLE);
                                                     spacebg.setVisibility(View.VISIBLE);
                                                 }
@@ -418,6 +422,7 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 showScore.setText(score+"");
+
                             }
                         });
                         break;
@@ -435,6 +440,8 @@ public class GameActivity extends AppCompatActivity {
                                     spacebg.setVisibility(View.GONE);
                                 }
                                 asteroid.stopPlayback();
+                                asteroid.start();
+                                asteroid.setVisibility(View.VISIBLE);
                                 asteroid.setVideoURI(uri);
                                 asteroid.start();
                             }
@@ -484,11 +491,11 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v)
                             {
-                                hasEnded = 0;
-                                player_state = 0;
-                                stopPlayer();
-                                play(view);
                                 spacebg.setImageResource(R.drawable.spacebgtemp);
+
+                                Intent i = new Intent (GameActivity.this, MainActivity.class);
+                                startActivity (i);
+                                stopPlayer();
                             }
                         });
                         break;
@@ -497,7 +504,7 @@ public class GameActivity extends AppCompatActivity {
             }
         };
 
-        t.schedule(tt,0,5000);
+        t.schedule(tt,0,6000);
 
         gyroscope.setListener(new Gyroscope.Listener() {
             @Override
@@ -524,7 +531,7 @@ public class GameActivity extends AppCompatActivity {
                 states = state.split ("_");
                 //Log.i ("COORDS", "rX " + rX + " rY " + rY);
                 if (Math.abs(rY)>Math.abs(rX)){
-                    if (Math.abs(rY) > 2.0f){ //rotate right
+                    if (Math.abs(rY) > 4.0f){ //rotate right
                         Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
 
                         if (states[0].equals("lower")){//if lower
@@ -566,7 +573,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    else if (Math.abs(rY) < 2.0f){ //rotate left
+                    else if (Math.abs(rY) < 4.0f){ //rotate left
 
                         Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
 
@@ -611,7 +618,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    if (Math.abs(rX) > 2.0f){ //rotate downward
+                    if (Math.abs(rX) > 4.0f){ //rotate downward
                         Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
                         if (states[0].equals("upper")){
                             if (states[1].equals("left")){
@@ -650,7 +657,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    else if (Math.abs(rX) < 2.0f){ //rotate upward
+                    else if (Math.abs(rX) < 4.0f){ //rotate upward
                         Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
                         if (states[0].equals("lower")){
                             if (states[1].equals("left")){
@@ -692,7 +699,6 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
-        //play(view);
     }
 
     @Override

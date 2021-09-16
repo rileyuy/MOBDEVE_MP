@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,6 +16,7 @@ import com.uy.esquivel.mobdeve_mp.model.Score;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class ScoreDAOFirebaseImpl implements ScoreDAO{
 
@@ -110,5 +113,38 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
         return result;
 
     }
+
+//    @Override
+//    public ArrayList<Score> getNew() {
+//        ArrayList<Score> result = new ArrayList<>();
+//        PriorityQueue<Score> prioScores = new PriorityQueue<>();
+//
+//        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>(){
+//            @Override
+//            public void onComplete(Task<DataSnapshot> task) {
+//                for(DataSnapshot data: task.getResult().getChildren()){
+//                    Score score = new Score();
+//
+//                    score.setScore(data.child("score").getValue(Integer.class));
+//                    score.setName(data.child("name").getValue(String.class));
+//
+//                    prioScores.add(score);
+//                }
+//            }
+//        });
+//
+//        int j = 0;
+//        while(!prioScores.isEmpty()){
+//
+//            result.add(prioScores.poll());
+//            Log.i ("GET GET GET", result.get(j).toString());
+//            j++;
+//        }
+//
+//        for (int i = 0; i<result.size(); i++)
+//            Log.i ("GET GET GET", result.get(i).toString());
+//        return result;
+//
+//    }
 
 }

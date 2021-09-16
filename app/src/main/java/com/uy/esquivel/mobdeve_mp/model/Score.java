@@ -3,7 +3,7 @@ package com.uy.esquivel.mobdeve_mp.model;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class Score implements Serializable {
+public class Score implements Serializable, Comparable<Score> {
 
     private String name = "";
     private int score = 0;
@@ -36,6 +36,17 @@ public class Score implements Serializable {
     @Override
     public String toString (){
         return this.name + "'s score is: " + this.score + "!";
+    }
+
+    @Override
+    public int compareTo(Score s1) {
+        if(this.score < s1.getScore())
+            return 1;
+        else if(this.score > s1.getScore())
+            return -1;
+        else{
+            return this.name.trim().toLowerCase().compareTo(s1.getName().trim().toLowerCase());
+        }
     }
 }
 
