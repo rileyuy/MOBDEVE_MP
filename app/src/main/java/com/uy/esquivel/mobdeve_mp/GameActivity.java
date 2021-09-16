@@ -194,7 +194,11 @@ public class GameActivity extends AppCompatActivity {
                         break;
 
                     case 1:
-                        startRecorder();
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
+                        } else {
+                            startRecorder();
+                        }
                         gyroscope.unregister();
                         Log.i ("PLAYER STATE", state);
                         Log.i ("UNREGISTERED", "gyro disabled");
@@ -740,11 +744,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         gyroscope.register();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
-        } else {
-            startRecorder();
-        }
+
         play(binding.getRoot());
     }
 
@@ -834,39 +834,30 @@ public class GameActivity extends AppCompatActivity {
                     score = 0;
                 }
             }, 2000);
-
-
         });
     }
 
-    public void startRecorder(){
-        if (mRecorder == null)
-        {
+    public void startRecorder() {
+        if (mRecorder == null)  {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mRecorder.setOutputFile("/dev/null");
-            try
-            {
+
+            try  {
                 mRecorder.prepare();
-            }catch (java.io.IOException ioe) {
-                android.util.Log.e("[Monkey]", "IOException: " +
-                        android.util.Log.getStackTraceString(ioe));
-
-            }catch (java.lang.SecurityException e) {
-                android.util.Log.e("[Monkey]", "SecurityException: " +
-                        android.util.Log.getStackTraceString(e));
+            } catch (java.io.IOException ioe) {
+                android.util.Log.e("[Monkey]", "IOException: " + android.util.Log.getStackTraceString(ioe));
+            } catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
             }
-            try
-            {
+
+            try {
                 mRecorder.start();
-            }catch (java.lang.SecurityException e) {
-                android.util.Log.e("[Monkey]", "SecurityException: " +
-                        android.util.Log.getStackTraceString(e));
+            } catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
             }
-
-            //mEMA = 0.0;
         }
     }
 
