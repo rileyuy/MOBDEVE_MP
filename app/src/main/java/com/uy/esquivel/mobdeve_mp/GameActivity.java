@@ -1,13 +1,12 @@
 package com.uy.esquivel.mobdeve_mp;
 
 import java.lang.Math;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
-import android.media.Image;
+
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,12 +14,12 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -439,9 +438,8 @@ public class GameActivity extends AppCompatActivity {
                                     //giv.setVisibility(View.GONE);
                                     spacebg.setVisibility(View.GONE);
                                 }
-                                asteroid.stopPlayback();
-                                asteroid.start();
-                                asteroid.setVisibility(View.VISIBLE);
+
+                                //asteroid.setVisibility(View.VISIBLE);
                                 asteroid.setVideoURI(uri);
                                 asteroid.start();
                             }
@@ -491,7 +489,7 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v)
                             {
-                                spacebg.setImageResource(R.drawable.spacebgtemp);
+                                //spacebg.setImageResource(R.drawable.spacebgtemp);
 
                                 Intent i = new Intent (GameActivity.this, MainActivity.class);
                                 startActivity (i);
@@ -781,12 +779,13 @@ public class GameActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            playagain.setVisibility(View.VISIBLE);
+
                             spacebg.setImageResource(R.drawable.game_over);
                             rvScore.setVisibility(View.VISIBLE);
                             enterName.setText("");
                             enterName.setVisibility(View.GONE);
                             enter.setVisibility(View.GONE);
+                            playagain.setVisibility(View.VISIBLE);
                         }
                     });
                     score = 0;
