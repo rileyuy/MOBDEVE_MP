@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import android.content.Intent;
 
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,19 @@ public class GameActivity extends AppCompatActivity {
     private Accelerometer accelerometer;
     private Gyroscope gyroscope;
 
+    TextView mStatusView;
+    MediaRecorder mRecorder;
+    Thread runner;
+    private static double mEMA = 0.0;
+    static final private double EMA_FILTER = 0.6;
+
+    final Handler mHandler = new Handler();
+
+    final Runnable updater = new Runnable(){
+        public void run(){
+            updateTv();
+        };
+    };
 
     //game-related variables
     private String state;
@@ -133,7 +147,6 @@ public class GameActivity extends AppCompatActivity {
             {
                 switch (player_state){
                     case 0:
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -149,10 +162,10 @@ public class GameActivity extends AppCompatActivity {
 
                             }
                         });
+
                         gyroscope.register();
                         asteroid_loc = (int)Math.floor(Math.random()*(3-0+1)+0);
                         Log.i ("PLAYER STATE", "ASTEROID POS: " + asteroid_loc);
-
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -177,6 +190,7 @@ public class GameActivity extends AppCompatActivity {
                         break;
 
                     case 1:
+                        startRecorder();
                         gyroscope.unregister();
                         Log.i ("PLAYER STATE", state);
                         Log.i ("UNREGISTERED", "gyro disabled");
@@ -188,6 +202,19 @@ public class GameActivity extends AppCompatActivity {
                                 asteroid.setVisibility(View.VISIBLE);
                             }
                         });
+
+                        runner = new Thread(){
+                            public void run() {
+                                while (runner != null) {
+                                    try {
+                                        Thread.sleep(1000);
+                                        Log.i("Noise", "Tock");
+                                    } catch (InterruptedException e) { };
+                                    mHandler.post(updater);
+                                }
+                            }
+                        };
+
                         switch (asteroid_loc){
                             case 0:
                                 if (state.equals("upper_left"))
@@ -427,6 +454,7 @@ public class GameActivity extends AppCompatActivity {
                         break;
 
                     case 2:
+                        stopRecorder();
                         Log.i ("PLAYER STATE", "YOU LOSE!");
                         Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_and_explosion);
                         runOnUiThread(new Runnable() {
@@ -703,6 +731,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         gyroscope.register();
+        startRecorder();
         play(binding.getRoot());
     }
 
@@ -710,6 +739,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         gyroscope.unregister();
+        stopRecorder();
         stopPlayer();
     }
 
@@ -737,7 +767,7 @@ public class GameActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    private void init(){
+    private void init() {
         ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
         scoreAdapter = new ScoreAdapter(getApplicationContext(),
                 scoreDAO.getAllScores());
@@ -795,4 +825,51 @@ public class GameActivity extends AppCompatActivity {
 
         });
     }
+
+    public void startRecorder(){
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mRecorder.setOutputFile("/dev/null");
+
+            try {
+                mRecorder.prepare();
+            } catch (java.io.IOException ioe) {
+                android.util.Log.e("[Monkey]", "IOException: " + android.util.Log.getStackTraceString(ioe));
+            } catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
+            }
+            try {
+                mRecorder.start();
+            } catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
+        }
+    }
+
+    public void stopRecorder() {
+        mRecorder.stop();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
+    public void updateTv(){
+        mStatusView.setText(Double.toString((getAmplitudeEMA())) + " dB");
+    }
+    public double soundDb(double ampl){
+        return  20 * Math.log10(getAmplitudeEMA() / ampl);
+    }
+    public double getAmplitude() {
+        if (mRecorder != null)
+            return  (mRecorder.getMaxAmplitude());
+        else
+            return 0;
+
+    }
+    public double getAmplitudeEMA() {
+        double amp =  getAmplitude();
+        mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
+        return mEMA;
+    }
+
 }
