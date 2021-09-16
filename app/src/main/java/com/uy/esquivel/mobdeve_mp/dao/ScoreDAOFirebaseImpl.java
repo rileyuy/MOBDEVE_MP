@@ -12,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.uy.esquivel.mobdeve_mp.model.Score;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScoreDAOFirebaseImpl implements ScoreDAO{
 
@@ -81,8 +83,9 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
     }
 
     @Override
-    public ArrayList<Score> getTop10Scores() {
+    public ArrayList<Score> getAllScores() {
         ArrayList<Score> result = new ArrayList<>();
+        ArrayList<Score> first10 = new ArrayList<>();
 
         myRef.addValueEventListener(new com.google.firebase.database.ValueEventListener(){
             @Override
@@ -93,7 +96,7 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
                     score.setScore(data.child("score").getValue(Integer.class));
                     score.setName(data.child("name").getValue(String.class));
 
-                    Log.i ("SCORE IN FIREBASE DAO", score.getName() +  "'s score is: " + score.getScore() + "!");
+                    //Log.i ("SCORE IN FIREBASE DAO", score.getName() +  "'s score is: " + score.getScore() + "!");
                     result.add(score);
                 }
             }
@@ -104,8 +107,8 @@ public class ScoreDAOFirebaseImpl implements ScoreDAO{
             }
         });
 
-
         return result;
+
     }
 
 }

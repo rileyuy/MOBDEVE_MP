@@ -39,9 +39,4 @@ public class Score implements Serializable {
     }
 }
 
-class ScoreComparator implements Comparator<Score> {
-    public int compare(Score score1, Score score2) {
-        return score1.getScore() - score2.getScore();
-    }
-}
 

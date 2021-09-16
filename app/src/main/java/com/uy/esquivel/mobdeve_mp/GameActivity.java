@@ -736,7 +736,7 @@ public class GameActivity extends AppCompatActivity {
     private void init(){
         ScoreDAO scoreDAO = new ScoreDAOFirebaseImpl(getApplicationContext());
         scoreAdapter = new ScoreAdapter(getApplicationContext(),
-                scoreDAO.getTop10Scores());
+                scoreDAO.getAllScores());
 
         RecyclerView rvScore = findViewById(R.id.rv_scores);
 
@@ -752,7 +752,7 @@ public class GameActivity extends AppCompatActivity {
             playerScore.setScore(score);
             playerScore.setName (binding.etName.getText().toString());
             scoreDAO.addScore(playerScore);
-            scoreAdapter.addScores(scoreDAO.getTop10Scores());
+            scoreAdapter.addScores(scoreDAO.getAllScores());
 
 //            for (int i = 0; i<scoreDAO.getTop10Scores().size(); i++)
 //                Log.i ("SCORE FOUND", scoreDAO.getTop10Scores().toString());
@@ -763,7 +763,7 @@ public class GameActivity extends AppCompatActivity {
             EditText enterName = findViewById(R.id.et_name);
             ImageButton enter = findViewById(R.id.ib_enter);
 
-            scoreAdapter.addScores(scoreDAO.getTop10Scores());
+            scoreAdapter.addScores(scoreDAO.getAllScores());
             scoreAdapter.notifyDataSetChanged();
 
             final Handler handler = new Handler();

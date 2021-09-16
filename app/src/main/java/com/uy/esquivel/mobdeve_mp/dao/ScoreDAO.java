@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface ScoreDAO {
     long addScore(Score score);
-    ArrayList<Score> getTop10Scores();
+    ArrayList<Score> getAllScores();
 }
