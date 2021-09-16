@@ -5,8 +5,10 @@ import java.lang.Math;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.Manifest;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,14 +52,15 @@ public class GameActivity extends AppCompatActivity {
     Thread runner;
     private static double mEMA = 0.0;
     static final private double EMA_FILTER = 0.6;
-
-    final Handler mHandler = new Handler();
+    public static final int RECORD_AUDIO = 0;
 
     final Runnable updater = new Runnable(){
         public void run(){
             updateTv();
         };
     };
+
+    final Handler mHandler = new Handler();
 
     //game-related variables
     private String state;
@@ -77,7 +81,7 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        mStatusView = findViewById(R.id.tv_showDecibels);
+        mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView shp = findViewById(R.id.iv_ship);
         ImageView spacebg = findViewById(R.id.iv_spacebg);
@@ -204,16 +208,21 @@ public class GameActivity extends AppCompatActivity {
                         });
 
                         runner = new Thread(){
-                            public void run() {
-                                while (runner != null) {
-                                    try {
+                            public void run()
+                            {
+                                while (runner != null)
+                                {
+                                    try
+                                    {
                                         Thread.sleep(1000);
-                                        Log.i("Noise", "Tock");
+                                        Log.i("Noise", EMA_FILTER + "");
                                     } catch (InterruptedException e) { };
                                     mHandler.post(updater);
                                 }
                             }
                         };
+                        runner.start();
+                        Log.d("Noise", "start runner()");
 
                         switch (asteroid_loc){
                             case 0:
@@ -731,7 +740,11 @@ public class GameActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         gyroscope.register();
-        startRecorder();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
+        } else {
+            startRecorder();
+        }
         play(binding.getRoot());
     }
 
@@ -827,30 +840,42 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void startRecorder(){
+        if (mRecorder == null)
+        {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
             mRecorder.setOutputFile("/dev/null");
-
-            try {
+            try
+            {
                 mRecorder.prepare();
-            } catch (java.io.IOException ioe) {
-                android.util.Log.e("[Monkey]", "IOException: " + android.util.Log.getStackTraceString(ioe));
-            } catch (java.lang.SecurityException e) {
-                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
+            }catch (java.io.IOException ioe) {
+                android.util.Log.e("[Monkey]", "IOException: " +
+                        android.util.Log.getStackTraceString(ioe));
+
+            }catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " +
+                        android.util.Log.getStackTraceString(e));
             }
-            try {
+            try
+            {
                 mRecorder.start();
-            } catch (java.lang.SecurityException e) {
-                android.util.Log.e("[Monkey]", "SecurityException: " + android.util.Log.getStackTraceString(e));
+            }catch (java.lang.SecurityException e) {
+                android.util.Log.e("[Monkey]", "SecurityException: " +
+                        android.util.Log.getStackTraceString(e));
+            }
+
+            //mEMA = 0.0;
         }
     }
 
     public void stopRecorder() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        if (mRecorder != null) {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        }
     }
 
     public void updateTv(){
@@ -871,5 +896,4 @@ public class GameActivity extends AppCompatActivity {
         mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;
         return mEMA;
     }
-
 }
