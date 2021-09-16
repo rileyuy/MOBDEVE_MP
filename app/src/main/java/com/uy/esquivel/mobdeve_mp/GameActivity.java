@@ -751,6 +751,8 @@ public class GameActivity extends AppCompatActivity {
             Score playerScore = new Score();
             playerScore.setScore(score);
             playerScore.setName (binding.etName.getText().toString());
+            if (playerScore.getName().isEmpty())
+                playerScore.setName("AAA");
             scoreDAO.addScore(playerScore);
             scoreAdapter.addScores(scoreDAO.getAllScores());
 
