@@ -144,6 +144,7 @@ public class GameActivity extends AppCompatActivity {
                                 grid.setVisibility(View.VISIBLE);
                                 //giv.setImageResource(R.drawable.spacebg);
                                 //giv.setVisibility(View.VISIBLE);
+                                spacebg.setImageResource(R.drawable.spacebgtemp);
                                 spacebg.setVisibility(View.VISIBLE);
 
                             }
@@ -176,6 +177,7 @@ public class GameActivity extends AppCompatActivity {
                         break;
 
                     case 1:
+                        gyroscope.unregister();
                         Log.i ("PLAYER STATE", state);
                         Log.i ("UNREGISTERED", "gyro disabled");
                         runOnUiThread(new Runnable() {
@@ -186,7 +188,6 @@ public class GameActivity extends AppCompatActivity {
                                 asteroid.setVisibility(View.VISIBLE);
                             }
                         });
-                        gyroscope.unregister();
                         switch (asteroid_loc){
                             case 0:
                                 if (state.equals("upper_left"))
@@ -433,7 +434,7 @@ public class GameActivity extends AppCompatActivity {
                                     //giv.setVisibility(View.GONE);
                                     spacebg.setVisibility(View.GONE);
                                 }
-
+                                asteroid.stopPlayback();
                                 asteroid.setVideoURI(uri);
                                 asteroid.start();
                             }
@@ -450,13 +451,12 @@ public class GameActivity extends AppCompatActivity {
                                         spacebg.setImageResource(R.drawable.high_score);
                                         enterName.setVisibility(View.VISIBLE);
                                         enter.setVisibility(View.VISIBLE);
-
+                                        hasEnded = 1;
                                         spacebg.setVisibility(View.VISIBLE);
                                         //playagain.setVisibility(View.VISIBLE);
                                         asteroid.setVisibility(View.GONE);
                                         stopPlayer();
                                         playEnd(view);
-                                        hasEnded = 1;
                                     }
                                 });
                             }
@@ -524,7 +524,7 @@ public class GameActivity extends AppCompatActivity {
                 states = state.split ("_");
                 //Log.i ("COORDS", "rX " + rX + " rY " + rY);
                 if (Math.abs(rY)>Math.abs(rX)){
-                    if (rY > 0.0f){ //rotate right
+                    if (Math.abs(rY) > 2.0f){ //rotate right
                         Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
 
                         if (states[0].equals("lower")){//if lower
@@ -566,7 +566,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    else if (rY < 0.0f){ //rotate left
+                    else if (Math.abs(rY) < 2.0f){ //rotate left
 
                         Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
 
@@ -611,7 +611,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    if (rX > 0.0f){ //rotate downward
+                    if (Math.abs(rX) > 2.0f){ //rotate downward
                         Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
                         if (states[0].equals("upper")){
                             if (states[1].equals("left")){
@@ -650,7 +650,7 @@ public class GameActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    else if (rX < 0.0f){ //rotate upward
+                    else if (Math.abs(rX) < 2.0f){ //rotate upward
                         Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
                         if (states[0].equals("lower")){
                             if (states[1].equals("left")){
@@ -770,17 +770,18 @@ public class GameActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    // Do something after 5s = 5000ms
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             playagain.setVisibility(View.VISIBLE);
                             spacebg.setImageResource(R.drawable.game_over);
                             rvScore.setVisibility(View.VISIBLE);
+                            enterName.setText("");
                             enterName.setVisibility(View.GONE);
                             enter.setVisibility(View.GONE);
                         }
                     });
+                    score = 0;
                 }
             }, 2000);
 
