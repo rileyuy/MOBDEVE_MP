@@ -77,7 +77,7 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
+        mStatusView = findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView shp = findViewById(R.id.iv_ship);
         ImageView spacebg = findViewById(R.id.iv_spacebg);
