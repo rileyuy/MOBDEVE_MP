@@ -168,7 +168,13 @@ public class GameActivity extends AppCompatActivity {
                                     try
                                     {
                                         Thread.sleep(1000);
-                                        Log.i("Noise", EMA_FILTER + "");
+                                        double threshold = 5000d;
+//                                        Log.i("Noise", EMA_FILTER + "");
+                                        Log.i ("AMPLITUDE", getAmplitudeEMA() + "");
+                                        Log.i ("POWAH!", powerActivate + "");
+                                        if (getAmplitudeEMA() > threshold) {
+                                            powerActivate = true;
+                                        }
                                     } catch (InterruptedException e) { };
                                     mHandler.post(updater);
                                 }
@@ -197,9 +203,7 @@ public class GameActivity extends AppCompatActivity {
                         asteroid_loc = (int)Math.floor(Math.random()*(3-0+1)+0);
                         Log.i ("PLAYER STATE", "ASTEROID POS: " + asteroid_loc);
 
-                        if (getAmplitudeEMA() > 10000) {
-                            powerActivate = true;
-                        }
+
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -282,6 +286,7 @@ public class GameActivity extends AppCompatActivity {
                                 }
                             });
                             player_state = 0;
+                            powerActivate=false;
 
                         } else {
                             switch (asteroid_loc){
@@ -632,7 +637,7 @@ public class GameActivity extends AppCompatActivity {
                 //Log.i ("COORDS", "rX " + rX + " rY " + rY);
                 if (Math.abs(rY)>Math.abs(rX)){
                     if (Math.abs(rY) > 4.0f){ //rotate right
-                        Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
+                        //Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
 
                         if (states[0].equals("lower")){//if lower
                             if (states[1].equals("left")){
@@ -675,7 +680,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                     else if (Math.abs(rY) < 4.0f){ //rotate left
 
-                        Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
+                        //Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
 
                         if (states[0].equals("lower")){//if lower
                             if (states[1].equals("right")){
@@ -719,7 +724,7 @@ public class GameActivity extends AppCompatActivity {
                 }
                 else{
                     if (Math.abs(rX) > 4.0f){ //rotate downward
-                        Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
+                        //Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
                         if (states[0].equals("upper")){
                             if (states[1].equals("left")){
                                 state = "lower_left";
@@ -758,7 +763,7 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                     else if (Math.abs(rX) < 4.0f){ //rotate upward
-                        Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
+                        //Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
                         if (states[0].equals("lower")){
                             if (states[1].equals("left")){
                                 state = "upper_left";
