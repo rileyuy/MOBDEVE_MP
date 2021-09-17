@@ -68,6 +68,9 @@ public class GameActivity extends AppCompatActivity {
     private int score = 0;
     private int hasEnded = 0;
 
+    private int powers = 3;
+    private boolean powerActivate = false;
+
     /*
         player_state = 0; player can move freely, after a set amount of time, player_state becomes 1
         player_state = 1; asteroid sequence plays, if player successfully dodges asteroid, player_state goes back to 0
@@ -871,6 +874,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void updateTv(){
         mStatusView.setText(Double.toString((getAmplitudeEMA())) + " dB");
+
     }
     public double soundDb(double ampl){
         return  20 * Math.log10(getAmplitudeEMA() / ampl);
