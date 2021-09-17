@@ -87,6 +87,7 @@ public class GameActivity extends AppCompatActivity {
         mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView ship = findViewById(R.id.iv_ship);
+        ImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
         ImageView spacebg = findViewById(R.id.iv_spacebg);
         ImageView hand = findViewById(R.id.iv_hand);
 
@@ -156,19 +157,19 @@ public class GameActivity extends AppCompatActivity {
                     case 0:
                         switch (powers) {
                             case 3:
-                                ship.setImageResource(R.drawable.power_3_spaceship);
+                                power_spaceship.setImageResource(R.drawable.power_3_spaceship);
                                 break;
 
                             case 2:
-                                ship.setImageResource(R.drawable.power_2_spaceship);
+                                power_spaceship.setImageResource(R.drawable.power_2_spaceship);
                                 break;
 
                             case 1:
-                                ship.setImageResource(R.drawable.power_1_spaceship);
+                                power_spaceship.setImageResource(R.drawable.power_1_spaceship);
                                 break;
 
                             default:
-                                ship.setImageResource(R.drawable.power_0_spaceship);
+                                power_spaceship.setImageResource(R.drawable.power_0_spaceship);
                                 break;
                         }
 

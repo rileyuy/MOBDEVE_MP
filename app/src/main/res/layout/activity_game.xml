@@ -45,7 +45,7 @@
         android:adjustViewBounds="true"/>
 
     <ImageView
-        android:id="@+id/iv_bg"
+        android:id="@+id/iv_power_spaceship"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:src="@drawable/power_3_spaceship"
