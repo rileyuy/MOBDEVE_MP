@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
     private int score = 0;
     private int hasEnded = 0;
 
-    private int powers = 3;
+//    private int powers = 3;
     private boolean powerActivate = false;
 
     /*
@@ -154,6 +154,29 @@ public class GameActivity extends AppCompatActivity {
             {
                 switch (player_state){
                     case 0:
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
+                        } else {
+                            startRecorder();
+                        }
+
+                        runner = new Thread(){
+                            public void run()
+                            {
+                                while (runner != null)
+                                {
+                                    try
+                                    {
+                                        Thread.sleep(1000);
+                                        Log.i("Noise", EMA_FILTER + "");
+                                    } catch (InterruptedException e) { };
+                                    mHandler.post(updater);
+                                }
+                            }
+                        };
+                        runner.start();
+                        Log.d("Noise", "start runner()");
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -174,6 +197,10 @@ public class GameActivity extends AppCompatActivity {
                         asteroid_loc = (int)Math.floor(Math.random()*(3-0+1)+0);
                         Log.i ("PLAYER STATE", "ASTEROID POS: " + asteroid_loc);
 
+                        if (getAmplitudeEMA() > 10000) {
+                            powerActivate = true;
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -193,15 +220,13 @@ public class GameActivity extends AppCompatActivity {
                                 }
                             }
                         });
+
                         player_state = 1;
+
                         break;
 
                     case 1:
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
-                        } else {
-                            startRecorder();
-                        }
+                        stopRecorder();
                         gyroscope.unregister();
                         Log.i ("PLAYER STATE", state);
                         Log.i ("UNREGISTERED", "gyro disabled");
@@ -214,252 +239,284 @@ public class GameActivity extends AppCompatActivity {
                             }
                         });
 
-                        runner = new Thread(){
-                            public void run()
-                            {
-                                while (runner != null)
-                                {
-                                    try
-                                    {
-                                        Thread.sleep(1000);
-                                        Log.i("Noise", EMA_FILTER + "");
-                                    } catch (InterruptedException e) { };
-                                    mHandler.post(updater);
-                                }
-                            }
-                        };
-                        runner.start();
-                        Log.d("Noise", "start runner()");
+                        if (powerActivate == true) {
+                            score++;
 
-                        switch (asteroid_loc){
-                            case 0:
-                                if (state.equals("upper_left"))
-                                    player_state = 2;
-                                else{
-                                    score++;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //giv.setVisibility(View.GONE);
+                                    spacebg.setVisibility(View.GONE);
+                                }
+                            });
+
+                            Uri uri;
+                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_power_up);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    grid.setVisibility(View.GONE);
+                                    shp.setVisibility(View.GONE);
+                                    asteroid.setVideoURI(uri);
+                                    asteroid.start();
+                                }
+                            });
+
+                            asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            //giv.setVisibility(View.GONE);
-                                            spacebg.setVisibility(View.GONE);
-                                        }
-                                    });
-                                    Uri uri;
-                                    switch (state){
-                                        case "lower_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_up);
-                                            break;
-                                        case "lower_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_upper_left);
-                                            break;
-                                        case "upper_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_left);
-                                            break;
-                                        default:
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
-                                    }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            grid.setVisibility(View.GONE);
-                                            shp.setVisibility(View.GONE);
-                                            asteroid.setVideoURI(uri);
-                                            asteroid.start();
-                                        }
-                                    });
-                                    asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                        @Override
-                                        public void onCompletion(MediaPlayer mp) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
 //                                                    player.reset();
 //                                                    player.release();
 //                                                    player=null;
-                                                    asteroid.setVisibility(View.GONE);
+                                            asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                    spacebg.setVisibility(View.VISIBLE);
-                                                    //giv.setVisibility(View.VISIBLE);
+                                            spacebg.setVisibility(View.VISIBLE);
+                                            //giv.setVisibility(View.VISIBLE);
 
-                                                }
-                                            });
                                         }
                                     });
-                                    player_state = 0;
                                 }
+                            });
+                            player_state = 0;
 
-                                break;
-                            case 1:
-                                if (state.equals("upper_right"))
-                                    player_state = 2;
-                                else{
-                                    score++;
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //giv.setVisibility(View.GONE);
-                                            spacebg.setVisibility(View.GONE);
+                        } else {
+                            switch (asteroid_loc){
+                                case 0:
+                                    if (state.equals("upper_left"))
+                                        player_state = 2;
+                                    else{
+                                        score++;
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //giv.setVisibility(View.GONE);
+                                                spacebg.setVisibility(View.GONE);
+                                            }
+                                        });
+                                        Uri uri;
+                                        switch (state){
+                                            case "lower_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_up);
+                                                break;
+                                            case "lower_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_upper_left);
+                                                break;
+                                            case "upper_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_left);
+                                                break;
+                                            default:
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
                                         }
-                                    });
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                grid.setVisibility(View.GONE);
+                                                shp.setVisibility(View.GONE);
+                                                asteroid.setVideoURI(uri);
+                                                asteroid.start();
+                                            }
+                                        });
+                                        asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                            @Override
+                                            public void onCompletion(MediaPlayer mp) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+//                                                    player.reset();
+//                                                    player.release();
+//                                                    player=null;
+                                                        asteroid.setVisibility(View.GONE);
+//                                                    asteroid.stopPlayback();
+                                                        spacebg.setVisibility(View.VISIBLE);
+                                                        //giv.setVisibility(View.VISIBLE);
 
-                                    Uri uri;
-                                    switch (state){
-                                        case "upper_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_right);
-                                            break;
-                                        case "lower_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_up);
-                                            break;
-                                        case "lower_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_upper_right);
-                                            break;
-                                        default:
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        player_state = 0;
                                     }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            shp.setVisibility(View.GONE);
-                                            grid.setVisibility(View.GONE);
-                                            asteroid.setVideoURI(uri);
-                                            asteroid.start();
+
+                                    break;
+                                case 1:
+                                    if (state.equals("upper_right"))
+                                        player_state = 2;
+                                    else{
+                                        score++;
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //giv.setVisibility(View.GONE);
+                                                spacebg.setVisibility(View.GONE);
+                                            }
+                                        });
+
+                                        Uri uri;
+                                        switch (state){
+                                            case "upper_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_right);
+                                                break;
+                                            case "lower_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_up);
+                                                break;
+                                            case "lower_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_upper_right);
+                                                break;
+                                            default:
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
                                         }
-                                    });
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                shp.setVisibility(View.GONE);
+                                                grid.setVisibility(View.GONE);
+                                                asteroid.setVideoURI(uri);
+                                                asteroid.start();
+                                            }
+                                        });
 
-                                    asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                        @Override
-                                        public void onCompletion(MediaPlayer mp) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                        asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                            @Override
+                                            public void onCompletion(MediaPlayer mp) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
-                                                    asteroid.setVisibility(View.GONE);
+                                                        asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                    spacebg.setVisibility(View.VISIBLE);
-                                                    //giv.setVisibility(View.VISIBLE);
-                                                }
-                                            });
-                                        }
-                                    });
-                                    player_state = 0;
-                                }
-
-                                break;
-                            case 2:
-                                if (state.equals("lower_left"))
-                                    player_state = 2;
-                                else{
-                                    score++;
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //giv.setVisibility(View.GONE);
-                                            spacebg.setVisibility(View.GONE);
-                                        }
-                                    });
-                                    Uri uri;
-                                    switch (state){
-                                        case "upper_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_down);
-                                            break;
-                                        case "lower_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_left);
-                                            break;
-                                        case "upper_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_lower_left);
-                                            break;
-                                        default:
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                                                        spacebg.setVisibility(View.VISIBLE);
+                                                        //giv.setVisibility(View.VISIBLE);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        player_state = 0;
                                     }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            shp.setVisibility(View.GONE);
-                                            grid.setVisibility(View.GONE);
-                                            asteroid.setVideoURI(uri);
-                                            asteroid.start();
-                                        }
-                                    });
-                                    asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                        @Override
-                                        public void onCompletion(MediaPlayer mp) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
 
-                                                    asteroid.setVisibility(View.GONE);
+                                    break;
+                                case 2:
+
+
+                                    if (state.equals("lower_left"))
+                                        player_state = 2;
+                                    else{
+                                        score++;
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //giv.setVisibility(View.GONE);
+                                                spacebg.setVisibility(View.GONE);
+                                            }
+                                        });
+                                        Uri uri;
+                                        switch (state){
+                                            case "upper_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_down);
+                                                break;
+                                            case "lower_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_left);
+                                                break;
+                                            case "upper_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_lower_left);
+                                                break;
+                                            default:
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                                        }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                shp.setVisibility(View.GONE);
+                                                grid.setVisibility(View.GONE);
+                                                asteroid.setVideoURI(uri);
+                                                asteroid.start();
+                                            }
+                                        });
+                                        asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                            @Override
+                                            public void onCompletion(MediaPlayer mp) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                    spacebg.setVisibility(View.VISIBLE);
+                                                        spacebg.setVisibility(View.VISIBLE);
 
-                                                    //giv.setVisibility(View.VISIBLE);
+                                                        //giv.setVisibility(View.VISIBLE);
 
-                                                }
-                                            });
-                                        }
-                                    });
-                                    player_state = 0;
-                                }
-
-                                break;
-                            case 3:
-                                if (state.equals("lower_right"))
-                                    player_state = 2;
-                                else{
-                                    score++;
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //giv.setVisibility(View.GONE);
-                                            spacebg.setVisibility(View.GONE);
-                                        }
-                                    });
-                                    Uri uri;
-                                    switch (state){
-                                        case "lower_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_right);
-                                            break;
-                                        case "upper_left":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_lower_right);
-                                            break;
-                                        case "upper_right":
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_down);
-                                            break;
-                                        default:
-                                            uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        player_state = 0;
                                     }
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            shp.setVisibility(View.GONE);
-                                            grid.setVisibility(View.GONE);
-                                            asteroid.setVideoURI(uri);
-                                            asteroid.start();
-                                        }
-                                    });
-                                    asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                        @Override
-                                        public void onCompletion(MediaPlayer mp) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
 
-                                                    asteroid.setVisibility(View.GONE);
+                                    break;
+                                case 3:
+                                    if (state.equals("lower_right"))
+                                        player_state = 2;
+                                    else{
+                                        score++;
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                //giv.setVisibility(View.GONE);
+                                                spacebg.setVisibility(View.GONE);
+                                            }
+                                        });
+                                        Uri uri;
+                                        switch (state){
+                                            case "lower_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_right);
+                                                break;
+                                            case "upper_left":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_lower_right);
+                                                break;
+                                            case "upper_right":
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_down);
+                                                break;
+                                            default:
+                                                uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.ast_game_over);
+                                        }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                shp.setVisibility(View.GONE);
+                                                grid.setVisibility(View.GONE);
+                                                asteroid.setVideoURI(uri);
+                                                asteroid.start();
+                                            }
+                                        });
+                                        asteroid.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                            @Override
+                                            public void onCompletion(MediaPlayer mp) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                    //giv.setVisibility(View.VISIBLE);
-                                                    spacebg.setVisibility(View.VISIBLE);
-                                                }
-                                            });
-                                        }
-                                    });
-                                    player_state = 0;
-                                }
+                                                        //giv.setVisibility(View.VISIBLE);
+                                                        spacebg.setVisibility(View.VISIBLE);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        player_state = 0;
+                                    }
 
-                                break;
-                            default:
+                                    break;
+                                default:
+                            }
                         }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -467,6 +524,7 @@ public class GameActivity extends AppCompatActivity {
 
                             }
                         });
+
                         break;
 
                     case 2:
