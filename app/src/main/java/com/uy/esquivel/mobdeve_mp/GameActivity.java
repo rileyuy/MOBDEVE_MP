@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
     private int score = 0;
     private int hasEnded = 0;
 
-//    private int powers = 3;
+    private int powers = 3;
     private boolean powerActivate = false;
 
     /*
@@ -86,7 +86,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(view);
         mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
-        ImageView shp = findViewById(R.id.iv_ship);
+        ImageView ship = findViewById(R.id.iv_ship);
         ImageView spacebg = findViewById(R.id.iv_spacebg);
         ImageView hand = findViewById(R.id.iv_hand);
 
@@ -154,6 +154,24 @@ public class GameActivity extends AppCompatActivity {
             {
                 switch (player_state){
                     case 0:
+                        switch (powers) {
+                            case 3:
+                                ship.setImageResource(R.drawable.power_3_spaceship);
+                                break;
+
+                            case 2:
+                                ship.setImageResource(R.drawable.power_2_spaceship);
+                                break;
+
+                            case 1:
+                                ship.setImageResource(R.drawable.power_1_spaceship);
+                                break;
+
+                            default:
+                                ship.setImageResource(R.drawable.power_0_spaceship);
+                                break;
+                        }
+
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
                         } else {
@@ -169,10 +187,10 @@ public class GameActivity extends AppCompatActivity {
                                     {
                                         Thread.sleep(1000);
                                         double threshold = 5000d;
-//                                        Log.i("Noise", EMA_FILTER + "");
                                         Log.i ("AMPLITUDE", getAmplitudeEMA() + "");
                                         Log.i ("POWAH!", powerActivate + "");
-                                        if (getAmplitudeEMA() > threshold) {
+
+                                        if (powers > 0 && getAmplitudeEMA() > threshold) {
                                             powerActivate = true;
                                         }
                                     } catch (InterruptedException e) { };
@@ -189,7 +207,7 @@ public class GameActivity extends AppCompatActivity {
                                 hand.setImageResource(R.drawable.hand_still);
                                 rvScore.setVisibility(View.GONE);
                                 playagain.setVisibility(View.GONE);
-                                shp.setVisibility(View.VISIBLE);
+                                ship.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
                                 //giv.setImageResource(R.drawable.spacebg);
                                 //giv.setVisibility(View.VISIBLE);
@@ -202,8 +220,6 @@ public class GameActivity extends AppCompatActivity {
                         gyroscope.register();
                         asteroid_loc = (int)Math.floor(Math.random()*(3-0+1)+0);
                         Log.i ("PLAYER STATE", "ASTEROID POS: " + asteroid_loc);
-
-
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -238,13 +254,14 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 //giv.setVisibility(View.VISIBLE);
-                                shp.setVisibility(View.VISIBLE);
+                                ship.setVisibility(View.VISIBLE);
                                 asteroid.setVisibility(View.VISIBLE);
                             }
                         });
 
                         if (powerActivate == true) {
                             score++;
+                            powers--;
 
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -261,7 +278,7 @@ public class GameActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     grid.setVisibility(View.GONE);
-                                    shp.setVisibility(View.GONE);
+                                    ship.setVisibility(View.GONE);
                                     asteroid.setVideoURI(uri);
                                     asteroid.start();
                                 }
@@ -286,7 +303,7 @@ public class GameActivity extends AppCompatActivity {
                                 }
                             });
                             player_state = 0;
-                            powerActivate=false;
+                            powerActivate = false;
 
                         } else {
                             switch (asteroid_loc){
@@ -320,7 +337,7 @@ public class GameActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 grid.setVisibility(View.GONE);
-                                                shp.setVisibility(View.GONE);
+                                                ship.setVisibility(View.GONE);
                                                 asteroid.setVideoURI(uri);
                                                 asteroid.start();
                                             }
@@ -378,7 +395,7 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                shp.setVisibility(View.GONE);
+                                                ship.setVisibility(View.GONE);
                                                 grid.setVisibility(View.GONE);
                                                 asteroid.setVideoURI(uri);
                                                 asteroid.start();
@@ -436,7 +453,7 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                shp.setVisibility(View.GONE);
+                                                ship.setVisibility(View.GONE);
                                                 grid.setVisibility(View.GONE);
                                                 asteroid.setVideoURI(uri);
                                                 asteroid.start();
@@ -493,7 +510,7 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                shp.setVisibility(View.GONE);
+                                                ship.setVisibility(View.GONE);
                                                 grid.setVisibility(View.GONE);
                                                 asteroid.setVideoURI(uri);
                                                 asteroid.start();
@@ -540,7 +557,7 @@ public class GameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 grid.setVisibility(View.GONE);
-                                shp.setVisibility(View.GONE);
+                                ship.setVisibility(View.GONE);
                                 if (hasEnded == 0){
                                     //giv.setVisibility(View.GONE);
                                     spacebg.setVisibility(View.GONE);
