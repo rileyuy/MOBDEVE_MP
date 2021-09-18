@@ -87,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
         mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView ship = findViewById(R.id.iv_ship);
-        ImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
+//        ImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
 //        ImageView spacebg = findViewById(R.id.iv_spacebg);
         ImageView hand = findViewById(R.id.iv_hand);
 
@@ -96,6 +96,7 @@ public class GameActivity extends AppCompatActivity {
         TextView showScore = findViewById(R.id.tv_showScore);
 
         GifImageView gifspacebg = findViewById(R.id.giv_spacebg);
+        GifImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
 
         ImageButton playagain = findViewById(R.id.ib_playagain);
         ImageButton enter = findViewById(R.id.ib_enter);
@@ -173,11 +174,11 @@ public class GameActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
-                        } else {
-                            startRecorder();
-                        }
+//                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
+//                        } else {
+//                            startRecorder();
+//                        }
 
                         runner = new Thread(){
                             public void run()
