@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer player;
     private ActivityMainBinding binding;
+    public static final int RECORD_AUDIO = 0;
 
 
     @Override
@@ -26,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+
+
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
+        }
 
         ImageButton bStart = findViewById(R.id.b_start);
 
