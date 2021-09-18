@@ -179,7 +179,11 @@ public class GameActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        startRecorder();
+                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
+                        } else {
+                            startRecorder();
+                        }
 
                         runner = new Thread(){
                             public void run()
@@ -888,10 +892,6 @@ public class GameActivity extends AppCompatActivity {
                 scoreDAO.getAllScores());
 
         RecyclerView rvScore = findViewById(R.id.rv_scores);
-
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
-        }
 
         rvScore.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
         rvScore.setAdapter(scoreAdapter);
