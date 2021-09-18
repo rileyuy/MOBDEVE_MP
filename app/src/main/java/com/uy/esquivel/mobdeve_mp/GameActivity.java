@@ -48,8 +48,9 @@ public class GameActivity extends AppCompatActivity {
     private ActivityGameBinding binding;
     private Accelerometer accelerometer;
     private Gyroscope gyroscope;
+    int movementCount = 0;
 
-    TextView mStatusView;
+    //TextView mStatusView;
     MediaRecorder mRecorder;
     Thread runner;
     private static double mEMA = 0.0;
@@ -86,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
+        //mStatusView = (TextView)findViewById(R.id.tv_showDecibels);
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView ship = findViewById(R.id.iv_ship);
 //        ImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
@@ -95,7 +96,7 @@ public class GameActivity extends AppCompatActivity {
 
         VideoView asteroid = findViewById(R.id.vv_asteroid);
 
-        TextView showScore = findViewById(R.id.tv_showScore);
+        //TextView showScore = findViewById(R.id.tv_showScore);
 
         GifImageView gifspacebg = findViewById(R.id.giv_spacebg);
         GifImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
@@ -556,7 +557,7 @@ public class GameActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    showScore.setText(score+"");
+                                    //showScore.setText(score+"");
 
                                 }
                             });
@@ -648,10 +649,11 @@ public class GameActivity extends AppCompatActivity {
         t.schedule(tt,0,6000);
 
         gyroscope.setListener(new Gyroscope.Listener() {
+
             @Override
             public void onRotation(float rX, float rY, float rZ) {
                 String states[] = new String[2];
-
+                float sens = 2.0f;
 
                 /*
                     rotate right = positive rY
@@ -670,174 +672,177 @@ public class GameActivity extends AppCompatActivity {
                 */
 
                 states = state.split ("_");
-                //Log.i ("COORDS", "rX " + rX + " rY " + rY);
-                if (Math.abs(rY)>Math.abs(rX)){
-                    if (Math.abs(rY) > 4.0f){ //rotate right
-                        //Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
+                Log.i ("movementCount", movementCount%4+"");
+                if (movementCount%4==0){
+                    if (Math.abs(rY)>Math.abs(rX)){
+                        if (Math.abs(rY) > sens){ //rotate right
+                            //Log.i ("ROTATION", "Rotating right! " + states[0] + states[1]);
 
-                        if (states[0].equals("lower")){//if lower
-                            if (states[1].equals("left")){
-                                state = "lower_right";
-                                if (width == 480 && height == 854){
-                                    img.setX(305);
-                                    img.setY(480);
-                                }else{
-                                    img.setX(640);
-                                    img.setY(1180);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_right);
+                            if (states[0].equals("lower")){//if lower
+                                if (states[1].equals("left")){
+                                    state = "lower_right";
+                                    if (width == 480 && height == 854){
+                                        img.setX(305);
+                                        img.setY(480);
+                                    }else{
+                                        img.setX(640);
+                                        img.setY(1180);
                                     }
-                                });
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_right);
+                                        }
+                                    });
 
+                                }
+                            }
+                            else { //if upper
+                                if (states[1].equals("left")){
+                                    state = "upper_right";
+                                    if (width == 480 && height == 854){
+                                        img.setX(305);
+                                        img.setY(180);
+                                    }
+                                    else{
+                                        img.setX(640);
+                                        img.setY(450);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_right);
+                                        }
+                                    });
+                                }
                             }
                         }
-                        else { //if upper
-                            if (states[1].equals("left")){
-                                state = "upper_right";
-                                if (width == 480 && height == 854){
-                                    img.setX(305);
-                                    img.setY(180);
-                                }
-                                else{
-                                    img.setX(640);
-                                    img.setY(450);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_right);
+                        else if (Math.abs(rY) < sens){ //rotate left
+
+                            //Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
+
+                            if (states[0].equals("lower")){//if lower
+                                if (states[1].equals("right")){
+                                    state = "lower_left";
+                                    if (width == 480 && height == 854){
+                                        img.setX(65);
+                                        img.setY(480);
                                     }
-                                });
+                                    else{
+                                        img.setX(105);
+                                        img.setY(1180);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_left);
+                                        }
+                                    });
+                                }
+                            }
+                            else { //if upper
+                                if (states[1].equals("right")){
+                                    state = "upper_left";
+                                    if (width == 480 && height == 854){
+                                        img.setX(65);
+                                        img.setY(180);
+                                    }
+                                    else{
+                                        img.setX(105);
+                                        img.setY(450);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_left);
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
-                    else if (Math.abs(rY) < 4.0f){ //rotate left
-
-                        //Log.i ("ROTATION", "Rotating left! " + states[0] + states[1]);
-
-                        if (states[0].equals("lower")){//if lower
-                            if (states[1].equals("right")){
-                                state = "lower_left";
-                                if (width == 480 && height == 854){
-                                    img.setX(65);
-                                    img.setY(480);
+                    else{
+                        if (Math.abs(rX) > sens){ //rotate downward
+                            //Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
+                            if (states[0].equals("upper")){
+                                if (states[1].equals("left")){
+                                    state = "lower_left";
+                                    if (width == 480 && height == 854){
+                                        img.setX(65);
+                                        img.setY(480);
+                                    }
+                                    else{
+                                        img.setX(105);
+                                        img.setY(1180);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_down);
+                                        }
+                                    });
                                 }
                                 else{
-                                    img.setX(105);
-                                    img.setY(1180);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_left);
+                                    state = "lower_right";
+                                    if (width == 480 && height == 854){
+                                        img.setX(305);
+                                        img.setY(480);
                                     }
-                                });
+                                    else{
+                                        img.setX(640);
+                                        img.setY(1180);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_down);
+                                        }
+                                    });
+                                }
                             }
                         }
-                        else { //if upper
-                            if (states[1].equals("right")){
-                                state = "upper_left";
-                                if (width == 480 && height == 854){
-                                    img.setX(65);
-                                    img.setY(180);
+                        else if (Math.abs(rX) < sens){ //rotate upward
+                            //Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
+                            if (states[0].equals("lower")){
+                                if (states[1].equals("left")){
+                                    state = "upper_left";
+                                    if (width == 480 && height == 854){
+                                        img.setX(65);
+                                        img.setY(180);
+                                    }
+                                    else{
+                                        img.setX(105);
+                                        img.setY(450);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_up);
+                                        }
+                                    });
                                 }
                                 else{
-                                    img.setX(105);
-                                    img.setY(450);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_left);
+                                    state = "upper_right";
+                                    if (width == 480 && height == 854){
+                                        img.setX(305);
+                                        img.setY(180);
                                     }
-                                });
+                                    else{
+                                        img.setX(640);
+                                        img.setY(450);
+                                    }
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hand.setImageResource(R.drawable.hand_up);
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
                 }
-                else{
-                    if (Math.abs(rX) > 4.0f){ //rotate downward
-                        //Log.i ("ROTATION", "Rotating downward! " + states[0] + states[1]);
-                        if (states[0].equals("upper")){
-                            if (states[1].equals("left")){
-                                state = "lower_left";
-                                if (width == 480 && height == 854){
-                                    img.setX(65);
-                                    img.setY(480);
-                                }
-                                else{
-                                    img.setX(105);
-                                    img.setY(1180);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_down);
-                                    }
-                                });
-                            }
-                            else{
-                                state = "lower_right";
-                                if (width == 480 && height == 854){
-                                    img.setX(305);
-                                    img.setY(480);
-                                }
-                                else{
-                                    img.setX(640);
-                                    img.setY(1180);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_down);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                    else if (Math.abs(rX) < 4.0f){ //rotate upward
-                        //Log.i ("ROTATION", "Rotating upward! " + states[0] + states[1]);
-                        if (states[0].equals("lower")){
-                            if (states[1].equals("left")){
-                                state = "upper_left";
-                                if (width == 480 && height == 854){
-                                    img.setX(65);
-                                    img.setY(180);
-                                }
-                                else{
-                                    img.setX(105);
-                                    img.setY(450);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_up);
-                                    }
-                                });
-                            }
-                            else{
-                                state = "upper_right";
-                                if (width == 480 && height == 854){
-                                    img.setX(305);
-                                    img.setY(180);
-                                }
-                                else{
-                                    img.setX(640);
-                                    img.setY(450);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hand.setImageResource(R.drawable.hand_up);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
+                movementCount++;
             }
         });
     }
@@ -899,7 +904,7 @@ public class GameActivity extends AppCompatActivity {
 //        binding.rvScores.setAdapter(scoreAdapter);
 
         binding.ibEnter.setOnClickListener (view -> {
-            TextView scoreText = findViewById(R.id.tv_showScore);
+            //TextView scoreText = findViewById(R.id.tv_showScore);
             //scoreText.setText(binding.etName.getText().toString() + "has score: " + score);
             Score playerScore = new Score();
             playerScore.setScore(score);
@@ -978,7 +983,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void updateTv(){
-        mStatusView.setText(Double.toString((getAmplitudeEMA())) + " dB");
+        //mStatusView.setText(Double.toString((getAmplitudeEMA())) + " dB");
 
     }
     public double soundDb(double ampl){
