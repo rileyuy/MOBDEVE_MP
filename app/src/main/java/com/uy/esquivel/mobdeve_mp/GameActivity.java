@@ -88,14 +88,14 @@ public class GameActivity extends AppCompatActivity {
         ImageView grid = findViewById(R.id.iv_grid);
         ImageView ship = findViewById(R.id.iv_ship);
         ImageView power_spaceship = findViewById(R.id.iv_power_spaceship);
-        ImageView spacebg = findViewById(R.id.iv_spacebg);
+//        ImageView spacebg = findViewById(R.id.iv_spacebg);
         ImageView hand = findViewById(R.id.iv_hand);
 
         VideoView asteroid = findViewById(R.id.vv_asteroid);
 
         TextView showScore = findViewById(R.id.tv_showScore);
 
-        //GifImageView giv = findViewById(R.id.giv_spacebg);
+        GifImageView gifspacebg = findViewById(R.id.giv_spacebg);
 
         ImageButton playagain = findViewById(R.id.ib_playagain);
         ImageButton enter = findViewById(R.id.ib_enter);
@@ -210,11 +210,12 @@ public class GameActivity extends AppCompatActivity {
                                 playagain.setVisibility(View.GONE);
                                 ship.setVisibility(View.VISIBLE);
                                 grid.setVisibility(View.VISIBLE);
-                                //giv.setImageResource(R.drawable.spacebg);
-                                //giv.setVisibility(View.VISIBLE);
-                                spacebg.setImageResource(R.drawable.spacebgtemp);
-                                spacebg.setVisibility(View.VISIBLE);
 
+                                //BACKGROUND SPACE
+//                                spacebg.setImageResource(R.drawable.spacebgtemp);
+//                                spacebg.setVisibility(View.VISIBLE);
+                                gifspacebg.setImageResource(R.drawable.spacebg);
+                                gifspacebg.setVisibility(View.VISIBLE);
                             }
                         });
 
@@ -267,8 +268,9 @@ public class GameActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //giv.setVisibility(View.GONE);
-                                    spacebg.setVisibility(View.GONE);
+                                    //BACKGROUND SPACE
+                                    gifspacebg.setVisibility(View.GONE);
+//                                    spacebg.setVisibility(View.GONE);
                                 }
                             });
 
@@ -296,7 +298,8 @@ public class GameActivity extends AppCompatActivity {
 //                                                    player=null;
                                             asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                            spacebg.setVisibility(View.VISIBLE);
+                                            //BACKGROUND SPACE
+                                            gifspacebg.setVisibility(View.VISIBLE);
                                             //giv.setVisibility(View.VISIBLE);
 
                                         }
@@ -316,8 +319,9 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                //giv.setVisibility(View.GONE);
-                                                spacebg.setVisibility(View.GONE);
+                                                //BACKGROUND SPACE
+                                                gifspacebg.setVisibility(View.GONE);
+                                                //spacebg.setVisibility(View.GONE);
                                             }
                                         });
                                         Uri uri;
@@ -354,8 +358,9 @@ public class GameActivity extends AppCompatActivity {
 //                                                    player=null;
                                                         asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                        spacebg.setVisibility(View.VISIBLE);
-                                                        //giv.setVisibility(View.VISIBLE);
+                                                        //BACKGROUND SPACE
+                                                        //spacebg.setVisibility(View.VISIBLE);
+                                                        gifspacebg.setVisibility(View.VISIBLE);
 
                                                     }
                                                 });
@@ -374,8 +379,9 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                //giv.setVisibility(View.GONE);
-                                                spacebg.setVisibility(View.GONE);
+                                                //BACKGROUND SPACE
+                                                gifspacebg.setVisibility(View.GONE);
+                                                //spacebg.setVisibility(View.GONE);
                                             }
                                         });
 
@@ -412,8 +418,9 @@ public class GameActivity extends AppCompatActivity {
 
                                                         asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                        spacebg.setVisibility(View.VISIBLE);
-                                                        //giv.setVisibility(View.VISIBLE);
+                                                        //BACKGROUND SPACE
+                                                        //spacebg.setVisibility(View.VISIBLE);
+                                                        gifspacebg.setVisibility(View.VISIBLE);
                                                     }
                                                 });
                                             }
@@ -433,8 +440,9 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                //giv.setVisibility(View.GONE);
-                                                spacebg.setVisibility(View.GONE);
+                                                //BACKGROUND SPACE
+                                                gifspacebg.setVisibility(View.GONE);
+                                                //spacebg.setVisibility(View.GONE);
                                             }
                                         });
                                         Uri uri;
@@ -469,9 +477,10 @@ public class GameActivity extends AppCompatActivity {
 
                                                         asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                        spacebg.setVisibility(View.VISIBLE);
 
-                                                        //giv.setVisibility(View.VISIBLE);
+                                                        //BACKGROUND SPACE
+                                                        //spacebg.setVisibility(View.VISIBLE);
+                                                        gifspacebg.setVisibility(View.VISIBLE);
 
                                                     }
                                                 });
@@ -490,8 +499,9 @@ public class GameActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                //giv.setVisibility(View.GONE);
-                                                spacebg.setVisibility(View.GONE);
+                                                //BACKGROUND SPACE
+                                                gifspacebg.setVisibility(View.GONE);
+                                                //spacebg.setVisibility(View.GONE);
                                             }
                                         });
                                         Uri uri;
@@ -526,8 +536,9 @@ public class GameActivity extends AppCompatActivity {
 
                                                         asteroid.setVisibility(View.GONE);
 //                                                    asteroid.stopPlayback();
-                                                        //giv.setVisibility(View.VISIBLE);
-                                                        spacebg.setVisibility(View.VISIBLE);
+                                                        //BACKGROUND SPACE
+                                                        gifspacebg.setVisibility(View.VISIBLE);
+                                                        //spacebg.setVisibility(View.VISIBLE);
                                                     }
                                                 });
                                             }
@@ -560,8 +571,9 @@ public class GameActivity extends AppCompatActivity {
                                 grid.setVisibility(View.GONE);
                                 ship.setVisibility(View.GONE);
                                 if (hasEnded == 0){
-                                    //giv.setVisibility(View.GONE);
-                                    spacebg.setVisibility(View.GONE);
+                                    //BACKGROUND SPACE
+                                    gifspacebg.setVisibility(View.GONE);
+                                    //spacebg.setVisibility(View.GONE);
                                 }
 
                                 //asteroid.setVisibility(View.VISIBLE);
@@ -578,12 +590,16 @@ public class GameActivity extends AppCompatActivity {
                                     public void run() {
                                         //giv.setImageResource(R.drawable.game_over_loop);
                                         //giv.setVisibility(View.VISIBLE);s
-                                        spacebg.setImageResource(R.drawable.high_score);
+                                        //spacebg.setImageResource(R.drawable.high_score);
+                                        gifspacebg.setImageResource(R.drawable.high_score);
+
                                         enterName.setVisibility(View.VISIBLE);
                                         enter.setVisibility(View.VISIBLE);
                                         hasEnded = 1;
-                                        spacebg.setVisibility(View.VISIBLE);
-                                        //playagain.setVisibility(View.VISIBLE);
+
+                                        //spacebg.setVisibility(View.VISIBLE);
+                                        gifspacebg.setVisibility(View.VISIBLE);
+
                                         asteroid.setVisibility(View.GONE);
                                         stopPlayer();
                                         playEnd(view);
@@ -891,7 +907,8 @@ public class GameActivity extends AppCompatActivity {
 //                Log.i ("SCORE FOUND", scoreDAO.getTop10Scores().toString());
 
             ImageButton playagain = findViewById(R.id.ib_playagain);
-            ImageView spacebg = findViewById(R.id.iv_spacebg);
+            //ImageView spacebg = findViewById(R.id.iv_spacebg);
+            GifImageView gifspacebg = findViewById(R.id.giv_spacebg);
 
             EditText enterName = findViewById(R.id.et_name);
             ImageButton enter = findViewById(R.id.ib_enter);
@@ -907,7 +924,8 @@ public class GameActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            spacebg.setImageResource(R.drawable.game_over);
+                            //spacebg.setImageResource(R.drawable.game_over);
+                            gifspacebg.setImageResource(R.drawable.game_over);
                             rvScore.setVisibility(View.VISIBLE);
                             enterName.setText("");
                             enterName.setVisibility(View.GONE);
