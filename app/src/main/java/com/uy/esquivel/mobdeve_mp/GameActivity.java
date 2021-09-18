@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -105,6 +107,7 @@ public class GameActivity extends AppCompatActivity {
 
         EditText enterName = findViewById(R.id.et_name);
 
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +115,7 @@ public class GameActivity extends AppCompatActivity {
                 enterName.setVisibility(View.GONE);
             }
         });
+
 
 
         init();
@@ -148,6 +152,7 @@ public class GameActivity extends AppCompatActivity {
         upper right x:640, y:450
          */
 
+
         Timer t = new Timer();
 
         TimerTask tt = new TimerTask() {
@@ -174,11 +179,7 @@ public class GameActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, GameActivity.RECORD_AUDIO);
-                        } else {
-                            startRecorder();
-                        }
+                        startRecorder();
 
                         runner = new Thread(){
                             public void run()
@@ -887,6 +888,10 @@ public class GameActivity extends AppCompatActivity {
                 scoreDAO.getAllScores());
 
         RecyclerView rvScore = findViewById(R.id.rv_scores);
+
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(GameActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORD_AUDIO);
+        }
 
         rvScore.setLayoutManager (new LinearLayoutManager(getApplicationContext()));
         rvScore.setAdapter(scoreAdapter);

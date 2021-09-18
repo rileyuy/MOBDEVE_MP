@@ -1,12 +1,15 @@
 package com.uy.esquivel.mobdeve_mp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.uy.esquivel.mobdeve_mp.databinding.ActivityMainBinding;
 
@@ -15,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     MediaPlayer player;
     private ActivityMainBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         play(view);
-
     }
 
     @Override
