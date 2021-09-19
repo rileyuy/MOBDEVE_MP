@@ -191,8 +191,8 @@ public class GameActivity extends AppCompatActivity {
                                         {
                                             Thread.sleep(1000);
                                             double threshold = 5000d;
-                                            Log.i ("AMPLITUDE", getAmplitudeEMA() + "");
-                                            Log.i ("POWAH!", powerActivate + "");
+//                                            Log.i ("AMPLITUDE", getAmplitudeEMA() + "");
+//                                            Log.i ("POWAH!", powerActivate + "");
 
                                             if (powers > 0 && getAmplitudeEMA() > threshold) {
                                                 powerActivate = true;
@@ -672,7 +672,7 @@ public class GameActivity extends AppCompatActivity {
                 */
 
                 states = state.split ("_");
-                Log.i ("movementCount", movementCount%4+"");
+                //Log.i ("movementCount", movementCount%4+"");
                 if (movementCount%4==0){
                     if (Math.abs(rY)>Math.abs(rX)){
                         if (Math.abs(rY) > sens){ //rotate right
